@@ -306,7 +306,7 @@ public class BulkUserServiceImplementation implements BulkUserService
         return this.objectMapper.convertValue(bulkUserDefinition, Map.class);
     }
 
-    private void checkValidFileName(String fileName)
+    public void checkValidFileName(String fileName)
     {
         if (!fileName.contains(DOT))
             throw new InvalidDataException(INVALID_FILE_NAME_OR_EXTENSION, globalMessageSource.get(INVALID_FILE_NAME_OR_EXTENSION));
