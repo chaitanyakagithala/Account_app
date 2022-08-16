@@ -211,6 +211,12 @@ class BulkUserServiceTest
     }
 
     @Test
+    void checkValidFileNameSuccessTest()
+    {
+        Assertions.assertDoesNotThrow(()->bulkUserServiceImplementation.checkValidFileName("accounts.csv"));
+    }
+
+    @Test
     void getAllBulkUsersFilterTest()
     {
         bulkUserServiceImplementation.getAllBulkUsers(DOCUMENT_ID,"101",CREATED_ON,"asc");
