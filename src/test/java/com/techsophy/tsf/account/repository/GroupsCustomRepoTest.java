@@ -3,10 +3,11 @@ package com.techsophy.tsf.account.repository;
 import com.techsophy.tsf.account.entity.GroupDefinition;
 import com.techsophy.tsf.account.repository.document.GroupsCustomRepositoryImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -15,7 +16,7 @@ import java.util.List;
 import static com.techsophy.tsf.account.constants.ThemesConstants.TEST_ACTIVE_PROFILE;
 
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class GroupsCustomRepoTest
 {
     @Mock
