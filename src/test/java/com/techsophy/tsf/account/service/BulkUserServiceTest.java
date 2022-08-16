@@ -7,6 +7,7 @@ import com.techsophy.tsf.account.constants.ThemesConstants;
 import com.techsophy.tsf.account.dto.*;
 import com.techsophy.tsf.account.entity.BulkUserDefinition;
 import com.techsophy.tsf.account.exception.BulkUserNotFoundException;
+import com.techsophy.tsf.account.exception.InvalidDataException;
 import com.techsophy.tsf.account.repository.BulkUploadDefinintionRepository;
 import com.techsophy.tsf.account.service.impl.BulkUserServiceImplementation;
 import com.techsophy.tsf.account.service.impl.UserManagementInKeyCloakImpl;
@@ -39,6 +40,7 @@ import java.util.stream.Stream;
 
 import static com.techsophy.tsf.account.constants.AccountConstants.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -120,6 +122,98 @@ class BulkUserServiceTest
         Mockito.when(bulkUploadDefinintionRepository.existsById(BigInteger.valueOf(1))).thenReturn(true);
         BulkUploadResponse bulkUploadResponse= bulkUserServiceImplementation.bulkUpdateStatus(bulkUploadSchema);
         Assertions.assertNotNull(bulkUploadResponse);
+    }
+
+    @Test
+    void getAllBulkUsersTest()
+    {
+        Mockito.when(bulkUploadDefinintionRepository.findBulkUsersByFilter(any(),any())).thenReturn(List.of());
+        bulkUserServiceImplementation.getAllBulkUsers("id","101","","");
+        Mockito.verify(bulkUploadDefinintionRepository,times(1)).findBulkUsersByFilter(any(),any());
+    }
+
+    @Test
+    void getAllBulkUsersPaginationEmptySortTest()
+    {
+        Page<BulkUserDefinition> bulkUserDefinitionList=new PageImpl<>(List.of());
+        Mockito.when(bulkUploadDefinintionRepository.findBulkUserByFilterPageable(any(),any(),any())).thenReturn(bulkUserDefinitionList);
+        bulkUserServiceImplementation.getAllBulkUsers("id","101","","",PageRequest.of(1,1));
+        Mockito.verify(bulkUploadDefinintionRepository,times(1)).findBulkUserByFilterPageable(any(),any(),any());
+    }
+
+    @Test
+    void getAllBulkUsersPaginationWithSortTest()
+    {
+        BulkUserDefinition bulkUserDefinition=new BulkUserDefinition();
+        bulkUserDefinition.setId(BigInteger.valueOf(101));
+        Page<BulkUserDefinition> bulkUserDefinitionList=new PageImpl<>(List.of(bulkUserDefinition));
+        Mockito.when(bulkUploadDefinintionRepository.findBulkUserByFilterSortPageable(any(),any(),any(),any(),any())).thenReturn(bulkUserDefinitionList);
+        bulkUserServiceImplementation.getAllBulkUsers("id","101","createdOn","desc",PageRequest.of(1,1));
+        Mockito.verify(bulkUploadDefinintionRepository,times(1)).findBulkUserByFilterSortPageable(any(),any(),any(),any(),any());
+    }
+
+    @Test
+    void getAllBulkUsersListEmptySortTest()
+    {
+        Mockito.when(bulkUploadDefinintionRepository.findBulkUsersByQ(any())).thenReturn(List.of());
+        bulkUserServiceImplementation.getAllBulkUsers("101","","");
+        Mockito.verify(bulkUploadDefinintionRepository,times(1)).findBulkUsersByQ(any());
+    }
+
+    @Test
+    void getAllBulkUsersListWithSortTest()
+    {
+        Mockito.when(bulkUploadDefinintionRepository.findBulkUsersByQSort(any(),any(),any())).thenReturn(List.of());
+        bulkUserServiceImplementation.getAllBulkUsers("101","createdOn","desc");
+        Mockito.verify(bulkUploadDefinintionRepository,times(1)).findBulkUsersByQSort(any(),any(),any());
+    }
+
+    @Test
+    void getAllBulkUsersPaginationQEmptySortTest()
+    {
+        BulkUserDefinition bulkUserDefinition=new BulkUserDefinition();
+        bulkUserDefinition.setId(BigInteger.valueOf(101));
+        Page<BulkUserDefinition> bulkUserDefinitionList=new PageImpl<>(List.of(bulkUserDefinition));
+        Mockito.when(bulkUploadDefinintionRepository.findBulkUsersByQPageable(any(),any())).thenReturn(bulkUserDefinitionList);
+        bulkUserServiceImplementation.getAllBulkUsers("101","","",PageRequest.of(1,1));
+        Mockito.verify(bulkUploadDefinintionRepository,times(1)).findBulkUsersByQPageable(any(),any());
+    }
+
+    @Test
+    void getAllBulkUsersPaginationQWithSortTest()
+    {
+        BulkUserDefinition bulkUserDefinition=new BulkUserDefinition();
+        bulkUserDefinition.setId(BigInteger.valueOf(101));
+        Page<BulkUserDefinition> bulkUserDefinitionList=new PageImpl<>(List.of(bulkUserDefinition));
+        Mockito.when(bulkUploadDefinintionRepository.findBulkUsersByQSortPageable(any(),any(),any(),any())).thenReturn(bulkUserDefinitionList);
+        bulkUserServiceImplementation.getAllBulkUsers("101","createdOn","desc",PageRequest.of(1,1));
+        Mockito.verify(bulkUploadDefinintionRepository,times(1)).findBulkUsersByQSortPageable(any(),any(),any(),any());
+    }
+
+    @Test
+    void convertBulkEntityTest()
+    {
+        BulkUserDefinition bulkUserDefinitionTest=new BulkUserDefinition();
+        bulkUserDefinitionTest.setId(BigInteger.valueOf(101));
+        Mockito.when(objectMapper.convertValue(any(), (Class<Object>) any())).thenReturn(new BulkUserResponse("101",null,"101","created"));
+        Assertions.assertNotNull(bulkUserServiceImplementation.convertBulkEntityToDTO(bulkUserDefinitionTest));
+    }
+    @Test
+    void checkValidFileNameTest()
+    {
+       Assertions.assertThrows(InvalidDataException.class,()->bulkUserServiceImplementation.checkValidFileName("file"));
+    }
+
+    @Test
+    void checkValidFileNameMoreDotsTest()
+    {
+        Assertions.assertThrows(InvalidDataException.class,()->bulkUserServiceImplementation.checkValidFileName("file.more.than.one.dot.in.file.name"));
+    }
+
+    @Test
+    void checkValidFileNameSuccessTest()
+    {
+        Assertions.assertDoesNotThrow(()->bulkUserServiceImplementation.checkValidFileName("accounts.csv"));
     }
 
     @Test

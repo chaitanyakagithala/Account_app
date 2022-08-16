@@ -85,6 +85,23 @@ class BulkUploadDefinitionCustomRepoTest
     }
 
     @Test
+    void findBulkUsersByQSearchTest()
+    {
+        BulkUserDefinition bulkUserDefinition = new BulkUserDefinition(BigInteger.ONE,map, BigInteger.ONE,"abc");
+        Mockito.when(mongoTemplate.find(any(),eq(BulkUserDefinition.class))).thenReturn(List.of(bulkUserDefinition));
+        bulkUploadDefinitionCustomRepository.findBulkUsersByQ("101");
+        verify(mongoTemplate,times(1)).find(any(),eq(BulkUserDefinition.class));
+    }
+
+    @Test
+    void findBulkUsersByQSortPageableTest()
+    {
+        BulkUserDefinition bulkUserDefinition = new BulkUserDefinition(BigInteger.ONE,map, BigInteger.ONE,"abc");
+        Mockito.when(mongoTemplate.find(any(),eq(BulkUserDefinition.class))).thenReturn(List.of(bulkUserDefinition));
+        bulkUploadDefinitionCustomRepository.findBulkUsersByQSortPageable("101","id","desc",PageRequest.of(1,1));
+        verify(mongoTemplate,times(1)).find(any(),eq(BulkUserDefinition.class));
+    }
+    @Test
     void findBulkUsersByQSortTest()
     {
         BulkUserDefinition bulkUserDefinition = new BulkUserDefinition(BigInteger.ONE,map, BigInteger.ONE,"abc");
