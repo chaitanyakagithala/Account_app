@@ -3,7 +3,9 @@ package com.techsophy.tsf.account.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techsophy.tsf.account.config.CustomFilter;
 import com.techsophy.tsf.account.config.GlobalMessageSource;
+import com.techsophy.tsf.account.controller.impl.UserPreferencesControllerImplementation;
 import com.techsophy.tsf.account.dto.UserPreferencesSchema;
+import com.techsophy.tsf.account.exception.GlobalExceptionHandler;
 import com.techsophy.tsf.account.service.UserPreferencesThemeService;
 import com.techsophy.tsf.account.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -12,24 +14,34 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import static com.techsophy.tsf.account.constants.AccountConstants.*;
 import static com.techsophy.tsf.account.constants.ThemesConstants.ID;
@@ -43,7 +55,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+//@SpringBootTest
+//@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
@@ -54,26 +68,36 @@ class UserPreferencesControllerTest {
     private static final SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor jwtRead = jwt().authorities(new SimpleGrantedAuthority(AWGMENT_ACCOUNT_READ));
     private static final SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor jwtDelete = jwt().authorities(new SimpleGrantedAuthority(AWGMENT_ACCOUNT_DELETE));
 
-    @MockBean
-    UserPreferencesThemeService mockUserPreferencesThemeService;
     @Mock
     GlobalMessageSource mockGlobalMessageSource;
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
+    @Mock
+    UserPreferencesThemeService mockUserPreferencesThemeService;
+    @InjectMocks
+    UserPreferencesControllerImplementation mockUserPreferencesControllerImplementation;
+    @Mock
     TokenUtils mockTokenUtils;
     @Autowired
     WebApplicationContext webApplicationContext;
     @Autowired
     CustomFilter customFilter;
 
+    MockHttpServletRequest request = new MockHttpServletRequest();
+
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
-                .addFilters(customFilter)
-                .apply(springSecurity())
+
+//        mockMvc = MockMvcBuilders
+//                .webAppContextSetup(webApplicationContext)
+//                .addFilters(customFilter)
+//                .apply(springSecurity())
+//                .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(mockUserPreferencesControllerImplementation)
+                .setControllerAdvice(new GlobalExceptionHandler(mockGlobalMessageSource))
                 .build();
+        MockitoAnnotations.openMocks(this);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
     }
 
     @Test
@@ -109,7 +133,7 @@ class UserPreferencesControllerTest {
 
     @Test
     void deleteProfilePictureTest() throws Exception {
-        Mockito.when(mockTokenUtils.getIssuerFromToken(TOKEN)).thenReturn(TENANT);
+//        Mockito.when(mockTokenUtils.getIssuerFromToken(TOKEN)).thenReturn(TENANT);
         RequestBuilder requestBuilderTest = MockMvcRequestBuilders.delete(BASE_URL + VERSION_V1 + USER_PREFERENCES_URL + PROFILE_PICTURE_URL)
                 .with(jwtDelete);
         this.mockMvc.perform(requestBuilderTest).andExpect(status().isOk());
@@ -117,7 +141,7 @@ class UserPreferencesControllerTest {
 
     @Test
     void deleteUserPreferencesThemeDataByUserIdTest() throws Exception {
-        Mockito.when(mockTokenUtils.getIssuerFromToken(TOKEN)).thenReturn(TENANT);
+//        Mockito.when(mockTokenUtils.getIssuerFromToken(TOKEN)).thenReturn(TENANT);
         RequestBuilder requestBuilderTest = MockMvcRequestBuilders.delete(BASE_URL + VERSION_V1 + USER_PREFERENCES_URL)
                 .with(jwtDelete);
         this.mockMvc.perform(requestBuilderTest).andExpect(status().isOk());

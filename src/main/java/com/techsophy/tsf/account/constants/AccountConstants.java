@@ -6,6 +6,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AccountConstants
 {
+ //DatabaseChangeLog
+ public static final String ORDER_1="1";
+ public static final String ORDER_2="2";
+ public static final String SYSTEM_VERSION_1="1";
+ public static final String ADD_ADMIN_USER= "add-admin-user01";
+ public static final String ADD_FORMDATA_ADMIN_USER= "add-formdata-admin-user01";
+
  //JWTRoleConverter
  public static final String CLIENT_ROLES="clientRoles";
  public static final String USER_INFO_URL= "techsophy-platform/protocol/openid-connect/userinfo";

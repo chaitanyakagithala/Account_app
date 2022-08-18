@@ -6,8 +6,10 @@ import com.techsophy.tsf.account.model.ApiErrorResponse;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,8 @@ import javax.validation.ConstraintViolationException;
 import static com.techsophy.tsf.account.constants.ThemesConstants.TEST_ACTIVE_PROFILE;
 
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
-@SpringBootTest
+//@SpringBootTest
+  @ExtendWith(MockitoExtension.class)
 class GlobalExceptionHandlerTest
 {
   @Mock

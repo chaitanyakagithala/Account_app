@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import static com.techsophy.tsf.account.constants.ThemesConstants.TEST_ACTIVE_PROFILE;
 
-@SpringBootTest
+//@SpringBootTest
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
 @ExtendWith({MockitoExtension.class, SpringExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

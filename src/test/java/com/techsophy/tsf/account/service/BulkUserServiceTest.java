@@ -20,6 +20,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -41,10 +42,11 @@ import static com.techsophy.tsf.account.constants.AccountConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @EnableWebMvc
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BulkUserServiceTest
 {
@@ -99,7 +101,7 @@ class BulkUserServiceTest
         Mockito.when(userServiceImpl.getCurrentlyLoggedInUserId()).thenReturn(list);
         MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input));
         PaginationResponsePayload paginationResponsePayload = new PaginationResponsePayload(list,1,1L,1,1,1);
-        Mockito.when(accountUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
+//        Mockito.when(accountUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
         when(this.objectMapper.convertValue(any(),ArgumentMatchers.eq(String.class))).thenReturn("abc,abc");
         Mockito.when(bulkUploadDefinintionRepository.save(any())).thenReturn(bulkUserDefinition);
         Mockito.when(userManagementInKeyCloak.getAllGroups()).thenReturn(Stream.of(schema1)).thenReturn(Stream.of(schema1)).thenReturn(Stream.of(schema1));
@@ -125,7 +127,7 @@ class BulkUserServiceTest
     @Test
     void getAllBulkUsersFilterTest()
     {
-        bulkUserServiceImplementation.getAllBulkUsers(DOCUMENT_ID,"101",CREATED_ON,"asc");
+        Assertions.assertNotNull(bulkUserServiceImplementation.getAllBulkUsers(DOCUMENT_ID,"101",CREATED_ON,"asc"));
     }
 
     @Test
@@ -135,10 +137,10 @@ class BulkUserServiceTest
         BulkUserDefinition bulkUserDefinition = new BulkUserDefinition(BigInteger.valueOf(1),map,BigInteger.valueOf(1),"status");
         PaginationResponsePayload paginationResponsePayload = new PaginationResponsePayload(list,1,1L,1,1,1);
         Page<BulkUserDefinition> page = new PageImpl<>(List.of(bulkUserDefinition));
-        Mockito.when(bulkUploadDefinintionRepository.findAll(pageable)).thenReturn(page);
-        Mockito.when(bulkUploadDefinintionRepository.findBulkUsersByQPageable("q",pageable)).thenReturn(page);
-        Mockito.when(tokenUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
-        bulkUserServiceImplementation.getAllBulkUsers(DOCUMENT_ID,"123",CREATED_ON,"asc");
+//        Mockito.when(bulkUploadDefinintionRepository.findAll(pageable)).thenReturn(page);
+//        Mockito.when(bulkUploadDefinintionRepository.findBulkUsersByQPageable("q",pageable)).thenReturn(page);
+//        Mockito.when(tokenUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
+        Assertions.assertNotNull(bulkUserServiceImplementation.getAllBulkUsers(DOCUMENT_ID,"123",CREATED_ON,"asc"));
     }
 
     @Test

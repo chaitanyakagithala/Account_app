@@ -30,7 +30,7 @@ import static com.techsophy.tsf.account.constants.ThemesConstants.TEST_ACTIVE_PR
 import static com.techsophy.tsf.account.constants.UserConstants.ID;
 
 
-@SpringBootTest
+//@SpringBootTest
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})

@@ -83,7 +83,8 @@ public class MenuRoleAssignServiceImpl implements MenuRoleAssignService
     public Stream<MenuRoleAssignSchema> getAllMenuRole()
     {
         return this.menuRoleAssignRepository.findAll().stream()
-                .map(menuRoleDefinition -> this.objectMapper.convertValue(menuRoleDefinition, MenuRoleAssignSchema.class));
+                .map(menuRoleDefinition ->
+                        this.objectMapper.convertValue(menuRoleDefinition, MenuRoleAssignSchema.class));
     }
 
     @Override

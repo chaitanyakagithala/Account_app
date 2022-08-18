@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
@@ -46,10 +47,9 @@ import static com.techsophy.tsf.account.constants.ThemesConstants.TEST_ACTIVE_PR
 import com.techsophy.tsf.account.exception.GroupsNotFoundException;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-@ActiveProfiles(TEST_ACTIVE_PROFILE)
-@ExtendWith({SpringExtension.class})
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(MockitoExtension.class)
+//@ActiveProfiles(TEST_ACTIVE_PROFILE)
+//@SpringBootTest
 class GroupsDataServiceTest {
     @Mock
     UserManagementInKeyCloakImpl userManagementInKeyCloak;
@@ -93,7 +93,7 @@ class GroupsDataServiceTest {
     @Test
     void getAllGroupsQnullTest() throws Exception {
         GroupDefinition groupDefinition = new GroupDefinition(BigInteger.valueOf(1), "abc", "abc", "abc");
-        Mockito.when(groupRepository.findAll(any(Sort.class))).thenReturn(List.of(groupDefinition));
+        Mockito.when(groupRepository.findAll((Sort) any())).thenReturn(List.of(groupDefinition));
         List<GroupsDataSchema> response = groupsDataServiceImpl.getAllGroups("", null, "");
         Assertions.assertNull(response);
     }
@@ -151,12 +151,15 @@ class GroupsDataServiceTest {
 
     @Test
     void groupsPagination() {
+        GroupsDataSchema groupsDataSchema = new GroupsDataSchema("123", "test", "description", "e8d5cea9-1215-45e9-b54a-0f7a2d6e0880",
+                roles, "123", Instant.now(), "createdByName", "123", Instant.now(), "updatedByName");
         GroupDefinition groupDefinition = new GroupDefinition(BigInteger.valueOf(1), "abc", "abc", "1");
         List<Map<String, Object>> list = new ArrayList<>();
         Page<GroupDefinition> groupDefinitions = new PageImpl<>(List.of(groupDefinition));
         Map<String, Object> map = new HashMap<>();
         map.put("foo", "bar");
         list.add(map);
+        when(mockObjectMapper.convertValue(any(),eq(GroupsDataSchema.class))).thenReturn(groupsDataSchema);
         when(mockObjectMapper.convertValue(any(), eq(Map.class))).thenReturn(map);
         when(mockTokenUtils.getPaginationResponsePayload(groupDefinitions, list)).thenReturn(new PaginationResponsePayload());
         groupsDataServiceImpl.groupsPagination(groupDefinitions);
@@ -292,7 +295,7 @@ class GroupsDataServiceTest {
         when(groupRepository.existsById(BigInteger.valueOf(Long.parseLong("10")))).thenReturn(true);
         when(groupRepository.findById(BigInteger.valueOf(Long.parseLong("10")))).thenReturn(Optional.of(groupDefinition));
         when(webClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), eq(null))).thenReturn(RESPONSE);
-        when(this.mockObjectMapper.readValue(anyString(),eq(new TypeReference<>(){}))).thenReturn(list1);
+//        when(mockObjectMapper.readValue(anyString(),eq(new TypeReference<>(){}))).thenReturn(list1);
         when(userManagementInKeyCloak.getClientMap(any())).thenReturn(map);
         when(userManagementInKeyCloak.getAllClientAndDefaultRoles()).thenReturn(map2);
         groupsDataServiceImpl.assignRolesToGroup("10",assignGroupRoles);

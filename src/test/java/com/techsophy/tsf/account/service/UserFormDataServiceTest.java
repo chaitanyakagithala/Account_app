@@ -19,6 +19,7 @@ import lombok.Cleanup;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.*;
@@ -37,10 +38,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @EnableWebMvc
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserFormDataServiceTest
 {
@@ -108,7 +110,7 @@ List<Map<String,Object>> list = new ArrayList<>();
         userDefinition.setId(BigInteger.valueOf(345345));
         when(mockUserServiceImpl.getCurrentlyLoggedInUserId()).thenReturn(list);
         when(mockUserServiceImpl.saveUser(any())).thenReturn(userDefinition.withId(BigInteger.valueOf(1234)));
-        when(mockUserServiceImpl.getUserByLoginId(any())).thenReturn(userSchema);
+//        when(mockUserServiceImpl.getUserByLoginId(any())).thenReturn(userSchema);
         //when(mockUserServiceImpl.setCreatedAndUpdatedUserName(any())).thenReturn(userFormDataSchema);
         when(mockObjectMapper.convertValue(any(),eq(UserFormDataDefinition.class))).thenReturn(userFormDataDefinition).thenReturn(userFormDataDefinition1);
         when(mockObjectMapper.convertValue(any(),eq(UserFormDataSchema.class))).thenReturn(userFormDataSchema1);
@@ -129,7 +131,7 @@ List<Map<String,Object>> list = new ArrayList<>();
         String userData= new String(stream.readAllBytes());
         UserFormDataSchema userFormDataSchema= objectMapper.readValue(userData,UserFormDataSchema.class);
         UserFormDataDefinition userFormDataDefinition= objectMapper.readValue(userData,UserFormDataDefinition.class);
-        when(mockUserServiceImpl.getCurrentlyLoggedInUserId()).thenReturn(list);
+//        when(mockUserServiceImpl.getCurrentlyLoggedInUserId()).thenReturn(list);
         when(mockUserFormDataDefinitionRepository.findByUserId(any())).thenReturn(Optional.ofNullable(userFormDataDefinition));
         when(mockObjectMapper.convertValue(any(),eq(UserFormDataSchema.class))).thenReturn(userFormDataSchema);
         UserFormDataSchema response= (UserFormDataSchema) userFormDataService.getUserFormDataByUserId("1234",false);
@@ -157,11 +159,11 @@ List<Map<String,Object>> list = new ArrayList<>();
         Pageable pageable = PageRequest.of(1,1);
         Page page = new PageImpl(List.of(userFormDataDefinition1));
         PaginationResponsePayload paginationResponsePayload = new PaginationResponsePayload(list,1,1L,1,1,1);
-        when(mockUserServiceImpl.getAllUsers(anyString(), (Sort) any())).thenReturn(List.of(userSchema));
+//        when(mockUserServiceImpl.getAllUsers(anyString(), (Sort) any())).thenReturn(List.of(userSchema));
         when(mockObjectMapper.convertValue(any(),eq(Map.class))).thenReturn(map);
         when(mockUserFormDataDefinitionRepository.findAll(pageable)).thenReturn(page);
         when(mockUserFormDataDefinitionRepository.findFormDataUserByQPageable(anyString(),any())).thenReturn(page);
-        when(accountUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
+//        when(accountUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
         PaginationResponsePayload response =  userFormDataService.getAllUserFormDataObjects(false,"abc",pageable);
         userFormDataService.getAllUserFormDataObjects(false,"",pageable);
         userFormDataService.getAllUserFormDataObjects(true,"abc",pageable);
@@ -187,7 +189,7 @@ List<Map<String,Object>> list = new ArrayList<>();
         Pageable pageable = PageRequest.of(1,1);
         Page page = new PageImpl(List.of(userFormDataDefinition1));
         PaginationResponsePayload paginationResponsePayload = new PaginationResponsePayload(list,1,1L,1,1,1);
-        when(accountUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
+//        when(accountUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
         when(mockUserFormDataDefinitionRepository.findByFilterColumnAndValue(anyString(),anyString(),any(),anyString())).thenReturn(page);
         when(mockObjectMapper.convertValue(any(),eq(Map.class))).thenReturn(map);
         PaginationResponsePayload response = userFormDataService.getAllUsersByFilter(false,"abc","abc",pageable,"");
@@ -307,11 +309,11 @@ List<Map<String,Object>> list = new ArrayList<>();
         String userData= new String(stream.readAllBytes());
         UserFormDataSchema userFormDataSchema= objectMapper.readValue(userData,UserFormDataSchema.class);
         UserFormDataDefinition userFormDataDefinition= objectMapper.readValue(userData,UserFormDataDefinition.class);
-        when(mockUserServiceImpl.getCurrentlyLoggedInUserId()).thenReturn(list);
-        when(mockUserFormDataDefinitionRepository.findByUserId(any())).thenReturn(Optional.ofNullable(userFormDataDefinition));
+//        when(mockUserServiceImpl.getCurrentlyLoggedInUserId()).thenReturn(list);
+//        when(mockUserFormDataDefinitionRepository.findByUserId(any())).thenReturn(Optional.ofNullable(userFormDataDefinition));
         doNothing().when(mockUserServiceImpl).deleteUserById("123");
         //when(mockUserServiceImpl.setCreatedAndUpdatedUserName(any())).thenReturn(userFormDataSchema);
-        when(mockObjectMapper.convertValue(any(),eq(UserFormDataSchema.class))).thenReturn(userFormDataSchema);
+ //       when(mockObjectMapper.convertValue(any(),eq(UserFormDataSchema.class))).thenReturn(userFormDataSchema);
         userFormDataService.deleteUserFormDataByUserId("123");
         verify(mockUserServiceImpl, times(1)).deleteUserById("123");
     }

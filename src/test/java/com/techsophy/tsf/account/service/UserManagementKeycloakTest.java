@@ -7,6 +7,7 @@ import com.techsophy.tsf.account.config.GlobalMessageSource;
 import com.techsophy.tsf.account.constants.AccountConstants;
 import com.techsophy.tsf.account.dto.*;
 import com.techsophy.tsf.account.exception.InvalidInputException;
+import com.techsophy.tsf.account.exception.MailException;
 import com.techsophy.tsf.account.exception.UserNotFoundException;
 import com.techsophy.tsf.account.service.impl.UserManagementInKeyCloakImpl;
 import com.techsophy.tsf.account.service.impl.UserServiceImpl;
@@ -18,6 +19,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,9 +37,10 @@ import static com.techsophy.tsf.account.constants.ThemesConstants.TEST_ACTIVE_PR
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
-@ExtendWith({SpringExtension.class})
+//@ExtendWith({SpringExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
  class UserManagementKeycloakTest {
     @Mock
@@ -67,7 +70,7 @@ import static org.mockito.Mockito.*;
         map1.put("userName", "nandini");
         map1.put(AccountConstants.REALM_ROLES,List.of("abc"));
         list1.add(map1);
-        Mockito.when(mockTokenUtils.getTokenFromContext()).thenReturn("abc");
+//        Mockito.when(mockTokenUtils.getTokenFromContext()).thenReturn("abc");
         ReflectionTestUtils.setField(userManagementInKeyCloak,"requiredClientsCSV","camunda-identity-service,ticketing-system");
     }
 //    @Test
@@ -147,7 +150,7 @@ import static org.mockito.Mockito.*;
         Map<String, Object> map = new HashMap<>();
         map.put(AccountConstants.REALM_ROLES,List.of("abc"));
         list1.add(map);
-        Mockito.when(mockObjectMapper.readValue(anyString(),ArgumentMatchers.eq(SaveSchema.class))).thenReturn(saveSchema);
+//        Mockito.when(mockObjectMapper.readValue(anyString(),ArgumentMatchers.eq(SaveSchema.class))).thenReturn(saveSchema);
         Mockito.when(mockObjectMapper.convertValue(any(),ArgumentMatchers.eq(GroupsSaveSchema.class))).thenReturn(groupsSaveSchema);
         Mockito.when(mockObjectMapper.convertValue(any(),ArgumentMatchers.eq(SaveSchema.class))).thenReturn(saveSchema);
         List<Map<String, Object>> list = new ArrayList<>();
@@ -160,7 +163,7 @@ import static org.mockito.Mockito.*;
         Mockito.when(mockObjectMapper.readValue(anyString(), any(TypeReference.class))).thenReturn(map).thenReturn(list1).thenReturn(map).thenReturn(list1).thenReturn(map).thenReturn(list1)
                         .thenReturn(map).thenReturn(list1);
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(),anyString(), ArgumentMatchers.eq(null))).thenReturn(json);
-        Mockito.when(mockObjectMapper.readValue(json,List.class)).thenReturn( list);
+//        Mockito.when(mockObjectMapper.readValue(json,List.class)).thenReturn( list);
         userManagementInKeyCloak.createGroup(groupsSchema);
         List<GroupsSaveSchema>  response = userManagementInKeyCloak.createGroup(groupsSchema1);
         Assertions.assertNotNull(response);
@@ -212,12 +215,12 @@ import static org.mockito.Mockito.*;
         UserRolesSchema userRolesSchema = new UserRolesSchema("1",list);
         GroupsSaveSchema groupsSaveSchema = new GroupsSaveSchema("1","abc");
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(),anyString(), ArgumentMatchers.eq(null))).thenReturn(response).thenReturn(response).thenReturn(null).thenReturn(response).thenReturn(json);
-        Mockito.when(mockObjectMapper.readValue(anyString(),any(TypeReference.class))).thenReturn(list1);
+//        Mockito.when(mockObjectMapper.readValue(anyString(),any(TypeReference.class))).thenReturn(list1);
         Mockito.when(mockObjectMapper.convertValue(any(),eq(HashMap.class))).thenReturn(map);
         Mockito.when(mockObjectMapper.readValue(anyString(),any(TypeReference.class))).thenReturn(map1).thenReturn(map1).thenReturn(list1);
         Mockito.when(mockTokenUtils.getTokenFromContext()).thenReturn("abc");
         RolesSchema rolesSchema = new RolesSchema("1","name");
-        Mockito.when(mockObjectMapper.convertValue(anyMap(),ArgumentMatchers.eq(RolesSchema.class))).thenReturn(rolesSchema);
+//        Mockito.when(mockObjectMapper.convertValue(anyMap(),ArgumentMatchers.eq(RolesSchema.class))).thenReturn(rolesSchema);
         GetUserGroupSchema getUserGroupSchema = new GetUserGroupSchema("1","name");
         Mockito.when(mockObjectMapper.convertValue(any(),ArgumentMatchers.eq(GetUserGroupSchema.class))).thenReturn(getUserGroupSchema);
         Mockito.when(mockObjectMapper.convertValue(any(),ArgumentMatchers.eq(GroupsSaveSchema.class))).thenReturn(groupsSaveSchema);
@@ -230,7 +233,9 @@ import static org.mockito.Mockito.*;
     {
         String response = RESPONSE;
         Mockito.when(mockTokenUtils.getTokenFromContext()).thenReturn("abc");
-        Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(),anyString(), ArgumentMatchers.eq(null))).thenReturn(response);
+        WebClient webClient= mock(WebClient.class);
+        Mockito.when(webClientWrapper.createWebClient(any())).thenReturn(webClient);
+        Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(),anyString(), anyString())).thenReturn(response);
         userManagementInKeyCloak.deleteGroup("1");
         verify(mockTokenUtils,times(1)).getTokenFromContext();
     }
@@ -243,8 +248,8 @@ import static org.mockito.Mockito.*;
         Mockito.when(mockObjectMapper.convertValue(any(),eq(HashMap.class))).thenReturn(hashMap);
         when(webClientWrapper.createWebClient(any())).thenReturn(webClient);
         Mockito.when(webClientWrapper.webclientRequestForUser(any(WebClient.class),anyString(), anyString())).thenReturn(response).thenReturn(null);
-        Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(), anyString(),ArgumentMatchers.eq(null))).thenReturn(response).thenReturn(response);
-        userManagementInKeyCloak.changePassword();
+        Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(), anyString(),ArgumentMatchers.any())).thenReturn(response).thenReturn(response);
+        Assertions.assertThrows(MailException.class,()->userManagementInKeyCloak.changePassword());
         verify(mockTokenUtils,times(2)).getTokenFromContext();
     }
     @Test
@@ -270,8 +275,8 @@ import static org.mockito.Mockito.*;
         when(webClientWrapper.createWebClient(any())).thenReturn(webClient);
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(), anyString(),any())).thenReturn(response).thenReturn(response);
         Mockito.when(mockObjectMapper.readValue(anyString(),any(TypeReference.class))).thenReturn(list);
-        userManagementInKeyCloak.getAllRoles();
-        verify(mockTokenUtils,times(1)).getTokenFromContext();
+        Assertions.assertThrows(InvalidInputException.class,()->userManagementInKeyCloak.getAllRoles());
+       // verify(mockTokenUtils,times(1)).getTokenFromContext();
 //        userManagementInKeyCloak.getClientMap("");
 //        Assertions.assertThrows(InvalidInputException.class,()->userManagementInKeyCloak.getClientMap(""));
     }
