@@ -64,22 +64,39 @@ import static org.mockito.Mockito.*;
         list.add(map);
     }
     @Test
-    void saveUser()
+    void saveUserWithIdTest()
     {
         UserData userSchema = new UserData("1","name","name","last","12","ab","cse");
-        UserData userSchema1 = new UserData(null,"name","name","last","12","ab","cse");
         UserDefinition userDefinition = new UserDefinition(BigInteger.ONE,"abc","abc","abc","1","abc","abc");
         UserDefinition userDefinition1 = new UserDefinition(BigInteger.ONE,"abc","abc","abc","1","abc","abc");
         Mockito.when(accountUtils.getLoggedInUserId()).thenReturn("service-account");
+        //Mockito.when(accountUtils.getLoggedInUserId()).thenReturn("service-account");
+        Mockito.when(mockObjectMapper.convertValue(any(), eq(UserData.class))).thenReturn(userSchema);
+        Mockito.when(accountRepository.findByEmailIdOrUserName(anyString(),anyString())).thenReturn(Optional.of(userDefinition));
+        Mockito.when(accountRepository.findById(BigInteger.ONE)).thenReturn(Optional.of(userDefinition)).thenReturn(Optional.of(userDefinition));
+        Mockito.when(accountRepository.save(any())).thenReturn(userDefinition.withId(BigInteger.valueOf(Long.parseLong(ThemesConstants.ID))));
+        Mockito.when(mockObjectMapper.convertValue(any(),eq(Map.class))).thenReturn(map);
+        Mockito.when(mockObjectMapper.convertValue(any(),eq(UserDefinition.class))).thenReturn(userDefinition).thenReturn(userDefinition1);
+        //Assertions.assertThrows(RuntimeException.class,()->mockUserServiceImpl.saveUser(userSchema1));
+        UserDefinition response = mockUserServiceImpl.saveUser(userSchema);
+        Assertions.assertNotNull(response);
+    }
+
+    @Test
+    void saveUserWithNullIdTest(){
+        UserData userSchema = new UserData(null,"name","name","last","12","ab","cse");
+        UserDefinition userDefinition = new UserDefinition(BigInteger.ONE,"abc","abc","abc","1","abc","abc");
+        Mockito.when(mockObjectMapper.convertValue(any(),eq(UserDefinition.class))).thenReturn(userDefinition).thenReturn(userDefinition);
         Mockito.when(accountUtils.getLoggedInUserId()).thenReturn("service-account");
         Mockito.when(accountRepository.findByEmailIdOrUserName(anyString(),anyString())).thenReturn(Optional.of(userDefinition));
-//        Mockito.when(accountRepository.findById(BigInteger.ONE)).thenReturn(Optional.of(userDefinition)).thenReturn(Optional.of(userDefinition));
-//      Mockito.when(accountRepository.save(any())).thenReturn(userDefinition.withId(BigInteger.valueOf(Long.parseLong(ThemesConstants.ID))));
-//        Mockito.when(mockObjectMapper.convertValue(any(),eq(Map.class))).thenReturn(map);
-        Mockito.when(mockObjectMapper.convertValue(any(),eq(UserDefinition.class))).thenReturn(userDefinition).thenReturn(userDefinition1);
-        Assertions.assertThrows(RuntimeException.class,()->mockUserServiceImpl.saveUser(userSchema1));
-//        UserDefinition response = mockUserServiceImpl.saveUser(userSchema);
-//        Assertions.assertNotNull(response);
+        Mockito.when(mockObjectMapper.convertValue(any(), eq(UserData.class))).thenReturn(userSchema);
+        Mockito.when(mockObjectMapper.convertValue(any(),eq(Map.class))).thenReturn(map);
+        Mockito.when(accountRepository.existsByUserName(any())).thenReturn(false);
+        Mockito.when(accountRepository.existsByEmailId(any())).thenReturn(false);
+        Mockito.when(mockIdGenerator.nextId()).thenReturn(BigInteger.ONE);
+        Mockito.when(accountRepository.save(any())).thenReturn(userDefinition.withId(BigInteger.valueOf(Long.parseLong(ThemesConstants.ID))));
+        UserDefinition response = mockUserServiceImpl.saveUser(userSchema);
+        Assertions.assertNotNull(response);
     }
     @Test
     void getUserById()

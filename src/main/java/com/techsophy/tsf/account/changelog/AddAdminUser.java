@@ -5,6 +5,7 @@ import com.techsophy.tsf.account.entity.UserDefinition;
 import com.techsophy.tsf.account.entity.UserFormDataDefinition;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
+import io.mongock.api.annotations.RollbackExecution;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -38,5 +39,10 @@ public class AddAdminUser {
             template.save(userDefinition, TP_USER_COLLECTION);
             template.save(userFormDataDefinition, TP_FORM_DATA_USER_COLLECTION);
         }
+    }
+    @RollbackExecution
+    public void rollback()
+    {
+        //Rollback Opertaion
     }
 }
