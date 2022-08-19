@@ -88,10 +88,6 @@ dependencies {
 
     implementation 'org.springframework.security:spring-security-test:5.6.3'
 
-    implementation 'io.mongock:mongock-springboot:5.0.38'
-    implementation 'io.mongock:mongodb-springdata-v3-driver:5.0.38'
-    implementation 'junit:junit:4.13.1'
-
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
@@ -123,7 +119,7 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             limit {
-                minimum = 0.74
+                minimum = 0.85
             }
         }
 

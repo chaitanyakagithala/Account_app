@@ -64,8 +64,8 @@ public class GroupsCustomRepositoryImpl implements GroupsCustomRepository
     }
 
     @Override
-    public List<GroupDefinition> findByIdIn(List<String> idList) {
-
+    public List<GroupDefinition> findByIdIn(List<String> idList)
+    {
         Query query = new Query(Criteria.where(GROUPS_DEFINITION_ID).in(idList));
         return mongoTemplate.find(query, GroupDefinition.class);
     }
