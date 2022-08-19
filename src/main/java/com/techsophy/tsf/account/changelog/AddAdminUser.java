@@ -25,8 +25,8 @@ public class AddAdminUser {
 
     @Execution
     public void changeSetFormDefinition() throws IOException {
-        String pathUser = "TP_USER.json";
-        String pathFormData = "TP_FORMDATA_USER.json";
+        String pathUser =TP_USER_JSON ;
+        String pathFormData =TP_FORMDATA_USER_JSON ;
         InputStream inputStreamUser = new ClassPathResource(pathUser).getInputStream();
         InputStream inputStreamFormData = new ClassPathResource(pathFormData).getInputStream();
         UserDefinition userDefinition = objectMapper.readValue(inputStreamUser, UserDefinition.class);
