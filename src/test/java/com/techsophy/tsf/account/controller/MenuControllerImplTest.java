@@ -28,7 +28,7 @@ import static com.techsophy.tsf.account.constants.MenuControllerConstant.*;
 import static com.techsophy.tsf.account.constants.UserConstants.ID;
 
 
-@SpringBootTest
+//@SpringBootTest
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})

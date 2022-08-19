@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+//@SpringBootTest
 @EnableWebMvc
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
 @ExtendWith(MockitoExtension.class)
@@ -86,8 +86,8 @@ class UserFormControllerTest
     {
         when(userFormDataService.getUserFormDataByUserId(userID, true)).thenReturn(new UserFormDataSchema( userData, null, null));
         ApiResponse responseEntity = userFormDataController.getUserByUserId(userID, true);
-        AuditableData userData = userFormDataService.getUserFormDataByUserId(userID, true);
-        assertThat(userData).isNotNull();
+//        AuditableData userData = userFormDataService.getUserFormDataByUserId(userID, true);
+//        assertThat(userData).isNotNull();
         assertEquals(true, responseEntity.getSuccess());
         verify(userFormDataService, times(1)).getUserFormDataByUserId(userID, true);
     }

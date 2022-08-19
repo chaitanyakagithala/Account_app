@@ -3,10 +3,12 @@ package com.techsophy.tsf.account.config;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,8 +23,9 @@ import static com.techsophy.tsf.account.constants.UserPreferencesConstants.USER_
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.beans.MethodInvocationException.ERROR_CODE;
 
-@ActiveProfiles(TEST_ACTIVE_PROFILE)
-@SpringBootTest
+//@ActiveProfiles(TEST_ACTIVE_PROFILE)
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class GlobalMessageSourceTest {
     @Mock
     MessageSource mockMessageSource;

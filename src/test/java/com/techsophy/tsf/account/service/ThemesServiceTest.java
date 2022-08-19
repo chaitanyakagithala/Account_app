@@ -24,6 +24,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -52,10 +53,11 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
-@SpringBootTest
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @EnableWebMvc
 @ActiveProfiles("test")
-@ExtendWith({SpringExtension.class})
+//@ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ThemesServiceTest
 {
@@ -117,7 +119,7 @@ class ThemesServiceTest
         ThemesSchema themesSchema = objectMapper.readValue(themeData, ThemesSchema.class);
         ThemesSchema themesSchema1 = new ThemesSchema(null,NAME,CONTENT);
         ThemesDefinition themesDefinition = objectMapper.readValue(themeData, ThemesDefinition.class);
-        when(mockObjectMapper.convertValue(any(), eq(ThemesDefinition.class))).thenReturn(themesDefinition);
+//        when(mockObjectMapper.convertValue(any(), eq(ThemesDefinition.class))).thenReturn(themesDefinition);
         when(themesDefinitionRepository.save(any())).thenReturn(themesDefinition.withId(BigInteger.valueOf(Long.parseLong(ThemesConstants.ID))));
         when(mockObjectMapper.convertValue(any(),eq(ThemesResponse.class ))).thenReturn(new ThemesResponse(ThemesConstants.ID));
         when(themesDefinitionRepository.findById((BigInteger) any())).thenReturn(Optional.of(new ThemesDefinition(BigInteger.valueOf(Long.parseLong(ID)), NAME, CONTENT)));

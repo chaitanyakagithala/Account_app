@@ -28,12 +28,11 @@ import java.io.IOException;
 import static com.techsophy.tsf.account.constants.ThemesConstants.*;
 import static com.techsophy.tsf.account.constants.UserConstants.ID;
 import static com.techsophy.tsf.account.constants.UserConstants.NAME;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@SpringBootTest
+//@SpringBootTest
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -58,8 +57,8 @@ class ThemesControllerTest
         Mockito.when(themesService.saveThemesData(themesSchema))
                 .thenReturn(new ThemesResponse(ID));
         ApiResponse<ThemesResponse> responseEntity = themesControllerImplementation.saveThemesData(themesSchema);
-        ThemesResponse data= themesService.saveThemesData(themesSchema);
-        assertNotEquals(null,data);
+        //ThemesResponse data= themesService.saveThemesData(themesSchema);
+        //assertNotEquals(null,data);
         assertEquals(true,responseEntity.getSuccess());
         verify(themesService, times(1)).saveThemesData(themesSchema);
     }
@@ -67,12 +66,12 @@ class ThemesControllerTest
     @Test
     void getThemesDataByIdTest()
     {
-        ApiResponse<ThemesResponseSchema> responseEntity=themesControllerImplementation.getThemesDataById(ID);
         Mockito.when(themesService.getThemesDataById(ID)).thenReturn(new ThemesResponseSchema(ID,NAME,CONTENT,CREATED_BY_ID,CREATED_ON, CREATEDBYNAME,UPDATED_BY_ID,UPDATED_ON,UPDATED_BY_NAME));
-        ThemesResponseSchema data= themesService.getThemesDataById(ID);
-        assertNotEquals(null,data);
+//        ThemesResponseSchema data= themesService.getThemesDataById(ID);
+//        assertNotEquals(null,data);
+        ApiResponse<ThemesResponseSchema> responseEntity=themesControllerImplementation.getThemesDataById(ID);
         assertEquals(true,responseEntity.getSuccess());
-        verify(themesService, times(1)).getThemesDataById(ID);
+        verify(themesService, times(2)).getThemesDataById(ID);
     }
 
     @Test
@@ -86,13 +85,14 @@ class ThemesControllerTest
     @Test
     void downloadThemeByIdTest() throws IOException
     {
-        ResponseEntity<Resource> responseEntity=themesControllerImplementation.downloadTheme(ThemesConstants.ID);
         String fileName = "file1";
         Mockito.when(themesService.downloadTheme(ThemesConstants.ID)).thenReturn(ResponseEntity.ok().header("Content-Type", "application/json")
                 .header("Content-Disposition", "attachment; filename=\"" + fileName +".json" + "\"")
                 .body(inputStreamResource));
-        ResponseEntity<Resource> data= themesService.downloadTheme(ThemesConstants.ID);
-        assertNotEquals(null,data);
+        ResponseEntity<Resource> responseEntity=themesControllerImplementation.downloadTheme(ThemesConstants.ID);
+//        ResponseEntity<Resource> data= themesService.downloadTheme(ThemesConstants.ID);
+//        assertNotEquals(null,data);
+        assertNotNull(responseEntity);
         verify(themesService, times(1)).downloadTheme(ThemesConstants.ID);
     }
 
@@ -101,7 +101,7 @@ class ThemesControllerTest
     {
         String themeName = "name";
         ApiResponse responseEntity=themesControllerImplementation.uploadTheme(file1, themeName);
-        themesService.uploadTheme(file1, themeName);
+        //themesService.uploadTheme(file1, themeName);
         assertEquals(true,responseEntity.getSuccess());
         verify(themesService, times(1)).uploadTheme(file1, themeName);
     }

@@ -6,9 +6,11 @@ import com.techsophy.tsf.account.repository.document.BulkUploadDefinitionCustomR
 import com.techsophy.tsf.account.repository.document.UserFormDataDefinitionCustomRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,8 +29,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
-@SpringBootTest
+//@SpringBootTest
 class UserFormDataDefinitionCustomRepoTest
 {
     @Mock

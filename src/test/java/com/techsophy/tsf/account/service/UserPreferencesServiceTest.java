@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -34,9 +35,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
-@ExtendWith({SpringExtension.class})
+//@ExtendWith({SpringExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserPreferencesServiceTest
 {
@@ -163,7 +165,8 @@ class UserPreferencesServiceTest
     {
         when(mockUserDetails.getUserDetails())
                 .thenReturn(userList);
-        when(mockUserPreferencesDefinitionRepository.findByUserId(BigInteger.valueOf(Long.parseLong(USER_ID)))).thenReturn(Optional.empty());
+       // when(mockUserPreferencesDefinitionRepository.findByUserId(BigInteger.valueOf(Long.parseLong(USER_ID)))).thenReturn(Optional.empty());
+
         Assertions.assertThrows(UserPreferencesNotFoundByLoggedInUserIdException.class,()->
                 mockUserPreferencesThemeServiceImplementation.deleteUserPreferencesThemeByUserId());
     }
@@ -179,7 +182,7 @@ class UserPreferencesServiceTest
         when(mockUserPreferencesDefinitionRepository.existsByUserId(BigInteger.valueOf(Long.parseLong(USER_ID)))).thenReturn(true).thenReturn(true).thenReturn(false);
         when(mockUserPreferencesDefinitionRepository.save(userPreferencesDefinition)).thenReturn(userPreferencesDefinition);
         when(mockUserPreferencesDefinitionRepository.findByUserId(BigInteger.valueOf(Long.parseLong(USER_ID)))).thenReturn(Optional.of(userPreferencesDefinition));
-        when(mockUserPreferencesDefinitionRepository.findById(BigInteger.ONE)).thenReturn(Optional.of(userPreferencesDefinition));
+//        when(mockUserPreferencesDefinitionRepository.findById(BigInteger.ONE)).thenReturn(Optional.of(userPreferencesDefinition));
         when(mockIdGeneratorImpl.nextId()).thenReturn(BigInteger.ONE);
         when(mockObjectMapper.convertValue(any(),eq(UserPreferencesResponse.class))).thenReturn(userPreferencesResponse);
         mockUserPreferencesThemeServiceImplementation.saveUserPreferencesTheme(userPreferencesSchema);
