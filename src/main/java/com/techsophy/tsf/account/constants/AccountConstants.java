@@ -12,6 +12,8 @@ public class AccountConstants
  public static final String SYSTEM_VERSION_1="1";
  public static final String ADD_ADMIN_USER= "add-admin-user01";
  public static final String ADD_FORMDATA_ADMIN_USER= "add-formdata-admin-user01";
+ public static final String TP_FORMDATA_USER_JSON ="TP_FORMDATA_USER.json";
+ public static final String TP_USER_JSON = "TP_USER.json";
 
  //JWTRoleConverter
  public static final String CLIENT_ROLES="clientRoles";
