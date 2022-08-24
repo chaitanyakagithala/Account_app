@@ -11,6 +11,7 @@ import com.techsophy.tsf.account.service.UserManagementInKeyCloak;
 import com.techsophy.tsf.account.utils.TokenUtils;
 import com.techsophy.tsf.account.utils.WebClientWrapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +31,7 @@ import static com.techsophy.tsf.account.constants.ErrorConstants.*;
 @RefreshScope
 @Service
 @AllArgsConstructor(onConstructor_ = {@Autowired})
+@Slf4j
 public class UserManagementInKeyCloakImpl implements UserManagementInKeyCloak
 {
     private final GlobalMessageSource globalMessageSource;
@@ -84,6 +86,9 @@ public class UserManagementInKeyCloakImpl implements UserManagementInKeyCloak
             userModel.put(USER_SCHEMA_CREDENTIALS, List.of(passwordCred));
             userModel.put(USER_SCHEMA_REQUIRED_ACTIONS, List.of(USER_SCHEMA_UPDATE_PASSWORD));
             userModel.put(USER_NAME, userData.getUserData().get(USER_NAME_DATA));
+//            log.info(passwordCred.toString());
+//            log.info(userModel.toString());
+            log.info(USERCREDENTIALS+userModel.get(USERNAME)+PASSWORD+passwordCred.get(VALUE)+EMAIL_NAME+userModel.get(EMAIL));
             String response = webClientWrapper.webclientRequest(client,keyCloakApi + tokenUtils.getIssuerFromContext()+ userCreationApi,POST,userModel);
             if (StringUtils.isNotEmpty(response))
             {

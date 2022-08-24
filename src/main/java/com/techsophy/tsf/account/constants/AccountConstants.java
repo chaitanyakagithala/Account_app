@@ -266,6 +266,11 @@ public class AccountConstants
  public static final String GET_ALL_CLIENTS_URL="techsophy-platform/clients";
  public static final String CLIENT_ID="clientId";
  public static final String GET_CLIENT_ROLES_URL="techsophy-platform/clients/";
+ public static final String USERCREDENTIALS="userCredentials- username : ";
+ public static final String USERNAME="username";
+ public static final String PASSWORD=",  password : ";
+ public static final String VALUE="value";
+ public static final String EMAIL_NAME=", email : ";
 
  //UserPreferencesThemeServiceImplConstants
  public static final String JPG_TYPE = "jpg";
