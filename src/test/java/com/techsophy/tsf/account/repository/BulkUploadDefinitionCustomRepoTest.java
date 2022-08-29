@@ -4,9 +4,11 @@ import com.techsophy.tsf.account.entity.BulkUserDefinition;
 import com.techsophy.tsf.account.repository.document.BulkUploadDefinitionCustomRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +25,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ActiveProfiles(TEST_ACTIVE_PROFILE)
-@SpringBootTest
+//@ActiveProfiles(TEST_ACTIVE_PROFILE)
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class BulkUploadDefinitionCustomRepoTest
 {
     @Mock
@@ -84,6 +87,23 @@ class BulkUploadDefinitionCustomRepoTest
         verify(mongoTemplate,times(1)).find(any(),eq(BulkUserDefinition.class));
     }
 
+    @Test
+    void findBulkUsersByQSearchTest()
+    {
+        BulkUserDefinition bulkUserDefinition = new BulkUserDefinition(BigInteger.ONE,map, BigInteger.ONE,"abc");
+        Mockito.when(mongoTemplate.find(any(),eq(BulkUserDefinition.class))).thenReturn(List.of(bulkUserDefinition));
+        bulkUploadDefinitionCustomRepository.findBulkUsersByQ("101");
+        verify(mongoTemplate,times(1)).find(any(),eq(BulkUserDefinition.class));
+    }
+
+    @Test
+    void findBulkUsersByQSortPageableTest()
+    {
+        BulkUserDefinition bulkUserDefinition = new BulkUserDefinition(BigInteger.ONE,map, BigInteger.ONE,"abc");
+        Mockito.when(mongoTemplate.find(any(),eq(BulkUserDefinition.class))).thenReturn(List.of(bulkUserDefinition));
+        bulkUploadDefinitionCustomRepository.findBulkUsersByQSortPageable("101","id","desc",PageRequest.of(1,1));
+        verify(mongoTemplate,times(1)).find(any(),eq(BulkUserDefinition.class));
+    }
     @Test
     void findBulkUsersByQSortTest()
     {

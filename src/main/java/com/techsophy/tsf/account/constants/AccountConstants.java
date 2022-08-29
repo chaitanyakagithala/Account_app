@@ -6,6 +6,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AccountConstants
 {
+ //DatabaseChangeLog
+ public static final String ORDER_1="1";
+ public static final String ORDER_2="2";
+ public static final String SYSTEM_VERSION_1="1";
+ public static final String ADD_ADMIN_USER= "add-admin-user01";
+ public static final String ADD_FORMDATA_ADMIN_USER= "add-formdata-admin-user01";
+ public static final String TP_FORMDATA_USER_JSON ="TP_FORMDATA_USER.json";
+ public static final String TP_USER_JSON = "TP_USER.json";
+
  //JWTRoleConverter
  public static final String CLIENT_ROLES="clientRoles";
  public static final String USER_INFO_URL= "techsophy-platform/protocol/openid-connect/userinfo";
@@ -257,6 +266,11 @@ public class AccountConstants
  public static final String GET_ALL_CLIENTS_URL="techsophy-platform/clients";
  public static final String CLIENT_ID="clientId";
  public static final String GET_CLIENT_ROLES_URL="techsophy-platform/clients/";
+ public static final String USERCREDENTIALS="User Credentials - username : ";
+ public static final String USERNAME="username";
+ public static final String PASSWORD=",  password : ";
+ public static final String VALUE="value";
+ public static final String EMAIL_NAME=", email : ";
 
  //UserPreferencesThemeServiceImplConstants
  public static final String JPG_TYPE = "jpg";

@@ -3,6 +3,8 @@ package com.techsophy.tsf.account.utils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,18 +19,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@ExtendWith({SpringExtension.class})
+//@SpringBootTest
+//@ExtendWith({SpringExtension.class})
+@ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
 class WebClientWrapperTest
 {
     @InjectMocks
     WebClientWrapper webClientWrapper;
+    @Mock
     private WebClient webClientMock;
 
-    @BeforeEach
-    void mockWebClient()
+
+    @Order(1)
+    @Test
+    void createWebClientTest()
+    {
+      WebClient webClientTest=  webClientWrapper.createWebClient(TOKEN);
+      Assertions.assertNotNull(webClientTest);
+    }
+
+    @Order(2)
+    @Test
+    void getWebClientRequestTest()
     {
         WebClient.RequestBodyUriSpec requestBodyUriMock = mock(WebClient.RequestBodyUriSpec.class);
         WebClient.RequestHeadersUriSpec requestHeadersUriSpec = mock(WebClient.RequestHeadersUriSpec.class);
@@ -47,20 +61,7 @@ class WebClientWrapperTest
         when(requestHeadersMock.retrieve()).thenReturn(responseMock);
         when(responseMock.bodyToMono(String.class))
                 .thenReturn(Mono.just(TEST));
-    }
 
-    @Order(1)
-    @Test
-    void createWebClientTest()
-    {
-      WebClient webClientTest=  webClientWrapper.createWebClient(TOKEN);
-      Assertions.assertNotNull(webClientTest);
-    }
-
-    @Order(2)
-    @Test
-    void getWebClientRequestTest()
-    {
         String getResponse= webClientWrapper.webclientRequest(webClientMock,LOCAL_HOST_URL, GET,null);
         assertEquals(TEST,getResponse);
         String putResponse= webClientWrapper.webclientRequest(webClientMock,LOCAL_HOST_URL,PUT,TOKEN);

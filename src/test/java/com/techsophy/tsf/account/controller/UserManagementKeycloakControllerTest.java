@@ -36,7 +36,7 @@ import static com.techsophy.tsf.account.constants.UserConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+//@SpringBootTest
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

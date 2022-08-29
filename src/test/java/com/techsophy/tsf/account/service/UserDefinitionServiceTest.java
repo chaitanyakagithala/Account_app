@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ActiveProfiles;
@@ -31,9 +32,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 @ActiveProfiles(TEST_ACTIVE_PROFILE)
-@ExtendWith({SpringExtension.class})
+//@ExtendWith({SpringExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserDefinitionServiceTest
 {
@@ -77,7 +79,7 @@ class UserDefinitionServiceTest
         userSchema.setUpdatedById("1");
         userSchema.setUpdatedByName("name");
         when(mockObjectMapper.convertValue(any(), eq(UserData.class))).thenReturn(userSchema);
-        when(mockUserDefinitionRepository.findByEmailIdOrUserName("user", "user")).thenReturn(java.util.Optional.ofNullable(userDefinition));
+//        when(mockUserDefinitionRepository.findByEmailIdOrUserName("user", "user")).thenReturn(java.util.Optional.ofNullable(userDefinition));
         when(mockUserDefinitionRepository.findById((BigInteger) any())).thenReturn(java.util.Optional.ofNullable(userDefinition));
         AuditableData response = userService.getUserById("12345");
         assertThat(response).isEqualTo(userSchema);
