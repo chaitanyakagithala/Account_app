@@ -66,4 +66,6 @@ public class ErrorConstants
     public static final String UNABLE_TO_SET_PASSWORD="AWGMENT-ACCOUNT-1056";
     public static final String INVALID_TOKEN="AWGMENT-ACCOUNT-1057";
     public static final String FILTER_OR_Q_REQUIRED="AWGMENT-ACCOUNT-1058";
+    public static final String EXCEUTION_IS_FAILED="storing data using mongock is failed";
+
 }
