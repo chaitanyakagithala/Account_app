@@ -29,11 +29,9 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-//@SpringBootTest
 @EnableWebMvc
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-//@ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
  class UserServiceTest {
     @Mock
@@ -70,14 +68,12 @@ import static org.mockito.Mockito.*;
         UserDefinition userDefinition = new UserDefinition(BigInteger.ONE,"abc","abc","abc","1","abc","abc");
         UserDefinition userDefinition1 = new UserDefinition(BigInteger.ONE,"abc","abc","abc","1","abc","abc");
         Mockito.when(accountUtils.getLoggedInUserId()).thenReturn("service-account");
-        //Mockito.when(accountUtils.getLoggedInUserId()).thenReturn("service-account");
         Mockito.when(mockObjectMapper.convertValue(any(), eq(UserData.class))).thenReturn(userSchema);
         Mockito.when(accountRepository.findByEmailIdOrUserName(anyString(),anyString())).thenReturn(Optional.of(userDefinition));
         Mockito.when(accountRepository.findById(BigInteger.ONE)).thenReturn(Optional.of(userDefinition)).thenReturn(Optional.of(userDefinition));
         Mockito.when(accountRepository.save(any())).thenReturn(userDefinition.withId(BigInteger.valueOf(Long.parseLong(ThemesConstants.ID))));
         Mockito.when(mockObjectMapper.convertValue(any(),eq(Map.class))).thenReturn(map);
         Mockito.when(mockObjectMapper.convertValue(any(),eq(UserDefinition.class))).thenReturn(userDefinition).thenReturn(userDefinition1);
-        //Assertions.assertThrows(RuntimeException.class,()->mockUserServiceImpl.saveUser(userSchema1));
         UserDefinition response = mockUserServiceImpl.saveUser(userSchema);
         Assertions.assertNotNull(response);
     }
@@ -148,7 +144,7 @@ import static org.mockito.Mockito.*;
     void deleteUserById()
     {
         Mockito.when(accountRepository.existsById(BigInteger.valueOf(1))).thenReturn(true).thenReturn(false);
-       doNothing().when(accountRepository).deleteById(BigInteger.valueOf(1));
+        doNothing().when(accountRepository).deleteById(BigInteger.valueOf(1));
         mockUserServiceImpl.deleteUserById("1");
         Assertions.assertThrows(EntityNotFoundByIdException.class,()->mockUserServiceImpl.deleteUserById("1"));
     }
@@ -156,7 +152,6 @@ import static org.mockito.Mockito.*;
     void getAllUsersByFilter()
     {
         UserDefinition userDefinition = new UserDefinition(BigInteger.ONE,"abc","abc","abc","1","abc","abc");
-//        Mockito.when(accountRepository.findByEmailIdOrUserName("1","1")).thenReturn(Optional.of(userDefinition));
         UserData userSchema = new UserData("1","name","name","last","12","ab","cse");
         Mockito.when(mockObjectMapper.convertValue(any(),eq(UserData.class))).thenReturn(userSchema);
         Mockito.when(accountRepository.findByEmailIdOrUserName("SYSTEM","SYSTEM")).thenReturn(Optional.of(userDefinition));

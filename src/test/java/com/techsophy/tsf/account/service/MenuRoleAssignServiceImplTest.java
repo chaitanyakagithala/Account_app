@@ -33,9 +33,7 @@ import static org.mockito.Mockito.*;
 
 //@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-//@ActiveProfiles(TEST_ACTIVE_PROFILE)
-//@ExtendWith({SpringExtension.class})
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+
  class MenuRoleAssignServiceImplTest {
     @Mock
     MenuRoleAssignRepository mockMenuRoleAssignRepository;
@@ -114,7 +112,6 @@ import static org.mockito.Mockito.*;
         MenuRoleAssignDefinition menuRoleAssignDefinition = new MenuRoleAssignDefinition(BigInteger.valueOf(10),"role",menus,1);
         MenuRoleAssignSchema menuRoleAssignSchema = new MenuRoleAssignSchema(String.valueOf(BigInteger.valueOf(1)),"role",menus);
         when(mockMenuRoleAssignRepository.findAll()).thenReturn(List.of(menuRoleAssignDefinition));
-//        when(mockObjectMapper.convertValue(any(),eq(MenuRoleAssignSchema.class))).thenReturn(menuRoleAssignSchema);
         mockMenuRoleAssignServiceImpl.getAllMenuRole();
         verify(mockMenuRoleAssignRepository,times(1)).findAll();
     }
@@ -125,7 +122,6 @@ import static org.mockito.Mockito.*;
         doNothing().when(mockMenuRoleAssignRepository).deleteById(BigInteger.valueOf(1));
         mockMenuRoleAssignServiceImpl.deleteMenuRoleById("1");
         verify(mockMenuRoleAssignRepository,times(1)).existsById(BigInteger.valueOf(1));
-       // Assertions.assertThrows(NoDataFoundException.class,()->mockMenuRoleAssignServiceImpl.deleteMenuRoleById(""));
     }
 
 

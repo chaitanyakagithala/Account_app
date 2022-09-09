@@ -34,9 +34,7 @@ import static org.mockito.Mockito.*;
 
 //@SpringBootTest
 @ExtendWith(MockitoExtension.class)
-//@ActiveProfiles(TEST_ACTIVE_PROFILE)
-//@ExtendWith({SpringExtension.class})
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+
  class MenuServiceImplTest {
 
     @Mock
@@ -114,7 +112,6 @@ import static org.mockito.Mockito.*;
     void getAllMenuTest(){
         MenuSchema menuSchema = new MenuSchema(String.valueOf(BigInteger.valueOf(1)),"type","label","url",true,"version");
         MenuDefinition menuDefinition = new MenuDefinition(BigInteger.valueOf(10),"type","label","url",true,2);
-//        when(mockObjectMapper.convertValue(any(),eq(MenuSchema.class))).thenReturn(menuSchema);
         when(mockMenuRepository.findAll()).thenReturn(List.of(menuDefinition));
         mockMenuServiceImpl.getAllMenus();
         verify(mockMenuRepository,times(1)).findAll();
@@ -126,6 +123,5 @@ import static org.mockito.Mockito.*;
         doNothing().when(mockMenuRepository).deleteById(BigInteger.valueOf(1));
         mockMenuServiceImpl.deleteMenuById("1");
         verify(mockMenuRepository,times(1)).existsById(BigInteger.ONE);
-        //Assertions.assertThrows(NoDataFoundException.class,()->mockMenuServiceImpl.deleteMenuById("1"));
     }
 }
