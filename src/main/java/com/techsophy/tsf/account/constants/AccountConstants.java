@@ -8,8 +8,8 @@ public class AccountConstants
 {
  //DatabaseChangeLog
  public static final String ORDER_1="1";
- public static final String ORDER_2="2";
- public static final String ORDER_3="3";
+ public static final String ORDER_2="100";
+ public static final String ORDER_3="101";
  public static final String SYSTEM_VERSION_1="1";
  public static final String ADD_ADMIN_USER= "add-admin-user01";
  public static final String ADD_SYSTEM_USER= "add-system-user01";
