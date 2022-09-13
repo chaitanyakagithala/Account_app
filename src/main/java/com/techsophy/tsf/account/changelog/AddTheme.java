@@ -2,10 +2,7 @@ package com.techsophy.tsf.account.changelog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.shaded.json.parser.ParseException;
-import com.techsophy.tsf.account.dto.ThemesSchema;
 import com.techsophy.tsf.account.entity.ThemesDefinition;
-import com.techsophy.tsf.account.entity.UserDefinition;
-import com.techsophy.tsf.account.repository.ThemesDefinitionRepository;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
@@ -14,12 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-
 import java.io.IOException;
 import java.io.InputStream;
-
 import static com.techsophy.tsf.account.constants.AccountConstants.*;
 import static com.techsophy.tsf.account.constants.ErrorConstants.EXCEUTION_IS_FAILED;
 

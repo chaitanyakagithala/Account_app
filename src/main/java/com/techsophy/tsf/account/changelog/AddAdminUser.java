@@ -12,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-
 import java.io.IOException;
 import java.io.InputStream;
-
 import static com.techsophy.tsf.account.constants.AccountConstants.*;
 import static com.techsophy.tsf.account.constants.ErrorConstants.EXCEUTION_IS_FAILED;
 

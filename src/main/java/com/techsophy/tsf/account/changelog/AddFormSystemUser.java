@@ -2,7 +2,6 @@ package com.techsophy.tsf.account.changelog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.shaded.json.parser.ParseException;
-import com.techsophy.tsf.account.entity.UserDefinition;
 import com.techsophy.tsf.account.entity.UserFormDataDefinition;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
@@ -14,7 +13,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-
 import java.io.IOException;
 import java.io.InputStream;
 import static com.techsophy.tsf.account.constants.AccountConstants.*;
