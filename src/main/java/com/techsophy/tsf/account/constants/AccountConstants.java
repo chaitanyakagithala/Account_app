@@ -10,6 +10,8 @@ public class AccountConstants
  public static final String ORDER_1="1";
  public static final String ORDER_2="100";
  public static final String ORDER_3="101";
+ public static final String ORDER_4="102";
+ public static final String ORDER_5="103";
  public static final String SYSTEM_VERSION_1="1";
  public static final String ADD_ADMIN_USER= "add-admin-user01";
  public static final String ADD_SYSTEM_USER= "add-system-user01";
@@ -19,6 +21,11 @@ public class AccountConstants
  public static final String TP_FORMDATA_SYSTEM_USER_JSON ="TP_FORMDATA_SYSTEM_USER.json";
  public static final String TP_USER_JSON = "TP_USER.json";
  public static final String TP_SYSTEM_USER_JSON = "TP_SYSTEM_USER.json";
+ public static final String TP_TEMPLATE_JSON = "TP_TEMPLATE.json";
+ public static final String TP_USER_THEME_JSON = "TP_USER_THEME.json";
+ public static final String ADD_THEME= "add-theme";
+ public static final String ADD_THEME_TO_USER= "add-theme_to_user";
+
 
  //JWTRoleConverter
  public static final String CLIENT_ROLES="clientRoles";
