@@ -2,7 +2,8 @@ package com.techsophy.tsf.account.changelog;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.shaded.json.parser.ParseException;
-import com.techsophy.tsf.account.entity.ThemesDefinition;
+import com.techsophy.tsf.account.entity.UserPreferencesDefinition;
+import org.bson.types.Binary;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -18,29 +19,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 
-import static com.techsophy.tsf.account.constants.UserFormDataConstants.ANYSTRING;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class AddThemeTest {
-    @InjectMocks
-    AddTheme addTheme;
-    @Mock
-    MongoTemplate template;
-    @Mock
-    ObjectMapper mockObjectMapper;
+class AddThemeToUserTest {
 
-//    @Test
-//    void SystemUserTest() throws IOException, ParseException {
-//        Assertions.assertThrows(NullPointerException.class,()->addTheme.changeSetFormDefinition());
-//    }
+    @Mock
+    ObjectMapper objectMapper;
+    @Mock
+    MongoTemplate mongoTemplate;
+
+    @InjectMocks
+    AddThemeToUser addThemeToUser;
 
     @Test
     void changeSetFormDefinitionTest() throws IOException, ParseException {
-        ThemesDefinition themesDefinition = new ThemesDefinition(BigInteger.ONE,ANYSTRING,ANYSTRING);
-        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class))).thenReturn(themesDefinition);
-        addTheme.changeSetFormDefinition();
-        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class));
+        UserPreferencesDefinition userPreferencesDefinition = new UserPreferencesDefinition(BigInteger.ONE,BigInteger.ONE,BigInteger.ONE,new Binary(new byte[2]));
+        Mockito.when(objectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(UserPreferencesDefinition.class))).thenReturn(userPreferencesDefinition);
+        addThemeToUser.changeSetFormDefinition();
+        Mockito.verify(objectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(UserPreferencesDefinition.class));
     }
 }
