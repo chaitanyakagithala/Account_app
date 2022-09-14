@@ -57,6 +57,7 @@ class AddSystemUserTest {
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(UserFormDataDefinition.class))).thenReturn(userFormDataDefinition);
         Mockito.when(template.getCollection(TP_USER_COLLECTION)).thenReturn(mongoCollection);
         Mockito.when(template.getCollection(TP_FORM_DATA_USER_COLLECTION)).thenReturn(mongoCollection);
+        Mockito.when(mongoCollection.countDocuments()).thenReturn(2L);
         addSystemUser.changeSetFormDefinition();
         Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(UserDefinition.class));
     }

@@ -60,6 +60,7 @@ class AddThemeTest {
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class))).thenReturn(themesDefinition);
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(UserPreferencesDefinition.class))).thenReturn(userPreferencesDefinition);
         Mockito.when(template.getCollection(TP_THEME_COLLECTION)).thenReturn(mongoCollection);
+        Mockito.when(mongoCollection.countDocuments()).thenReturn(2L);
         Mockito.when(userPreferencesDefinitionRepository.existsByUserId(any())).thenReturn(true);
         addTheme.changeSetFormDefinition();
         Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class));
