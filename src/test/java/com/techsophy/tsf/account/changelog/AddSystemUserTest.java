@@ -37,11 +37,11 @@ class AddSystemUserTest {
         Assertions.assertThrows(NullPointerException.class,()->addSystemUser.changeSetFormDefinition());
     }
 
-    @Test
-    void changeSetFormDefinitionTest() throws IOException, ParseException {
-        UserDefinition userDefinition = new UserDefinition(BigInteger.ONE,"abc","abc","abc","abc","abc@gmail.com","cs");
-        Mockito.when(mockObjectMapper.readValue(any(InputStream.class),ArgumentMatchers.eq(UserDefinition.class))).thenReturn(userDefinition);
-        addSystemUser.changeSetFormDefinition();
-        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(UserDefinition.class));
-    }
+//    @Test
+//    void changeSetFormDefinitionTest() throws IOException, ParseException {
+//        UserDefinition userDefinition = new UserDefinition(BigInteger.ONE,"abc","abc","abc","abc","abc@gmail.com","cs");
+//        Mockito.when(mockObjectMapper.readValue(any(InputStream.class),ArgumentMatchers.eq(UserDefinition.class))).thenReturn(userDefinition);
+//        addSystemUser.changeSetFormDefinition();
+//        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(UserDefinition.class));
+//    }
 }

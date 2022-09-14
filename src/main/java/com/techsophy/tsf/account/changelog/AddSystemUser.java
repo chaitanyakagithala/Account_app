@@ -3,6 +3,7 @@ package com.techsophy.tsf.account.changelog;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.shaded.json.parser.ParseException;
 import com.techsophy.tsf.account.entity.UserDefinition;
+import com.techsophy.tsf.account.entity.UserFormDataDefinition;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
@@ -27,14 +28,17 @@ public class AddSystemUser {
     public static  int count =0;
     @Execution
     public void changeSetFormDefinition() throws IOException, ParseException {
-        String  pathUser =TP_SYSTEM_USER_JSON;
-        InputStream inputStreamTest=new ClassPathResource(pathUser).getInputStream();
-        UserDefinition userDefinition = objectMapper.readValue(inputStreamTest,UserDefinition.class);
-        String id = String.valueOf(userDefinition.getId());
-        Query query = new Query();
-        query.addCriteria(Criteria.where(UNDERSCORE_ID).is(id));
-        if(template.find(query,UserDefinition.class).size()==0) {
+        String pathUser =TP_SYSTEM_USER_JSON ;
+        String pathFormData =TP_FORMDATA_SYSTEM_USER_JSON ;
+        InputStream inputStreamUser = new ClassPathResource(pathUser).getInputStream();
+        InputStream inputStreamFormData = new ClassPathResource(pathFormData).getInputStream();
+        UserDefinition userDefinition = objectMapper.readValue(inputStreamUser, UserDefinition.class);
+        UserFormDataDefinition userFormDataDefinition = objectMapper.readValue(inputStreamFormData, UserFormDataDefinition.class);
+        long countTpUser = template.getCollection(TP_USER_COLLECTION).countDocuments();
+        long countTpFormDataUser = template.getCollection(TP_FORM_DATA_USER_COLLECTION).countDocuments();
+        if (countTpUser <= 1 && countTpFormDataUser <=1) {
             template.save(userDefinition, TP_USER_COLLECTION);
+            template.save(userFormDataDefinition, TP_FORM_DATA_USER_COLLECTION);
         }
     }
     @RollbackExecution

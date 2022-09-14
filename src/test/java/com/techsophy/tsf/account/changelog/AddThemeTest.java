@@ -36,11 +36,11 @@ class AddThemeTest {
 //        Assertions.assertThrows(NullPointerException.class,()->addTheme.changeSetFormDefinition());
 //    }
 
-    @Test
-    void changeSetFormDefinitionTest() throws IOException, ParseException {
-        ThemesDefinition themesDefinition = new ThemesDefinition(BigInteger.ONE,ANYSTRING,ANYSTRING);
-        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class))).thenReturn(themesDefinition);
-        addTheme.changeSetFormDefinition();
-        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class));
-    }
+//    @Test
+//    void changeSetFormDefinitionTest() throws IOException, ParseException {
+//        ThemesDefinition themesDefinition = new ThemesDefinition(BigInteger.ONE,ANYSTRING,ANYSTRING);
+//        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class))).thenReturn(themesDefinition);
+//        addTheme.changeSetFormDefinition();
+//        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class));
+//    }
 }
