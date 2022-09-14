@@ -11,11 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-
 import java.io.IOException;
 import java.io.InputStream;
-
 import static com.techsophy.tsf.account.constants.AccountConstants.*;
 import static com.techsophy.tsf.account.constants.ErrorConstants.EXCEUTION_IS_FAILED;
 
@@ -34,10 +33,8 @@ public class AddAdminUser {
         InputStream inputStreamFormData = new ClassPathResource(pathFormData).getInputStream();
         UserDefinition userDefinition = objectMapper.readValue(inputStreamUser, UserDefinition.class);
         UserFormDataDefinition userFormDataDefinition = objectMapper.readValue(inputStreamFormData, UserFormDataDefinition.class);
-        Query query = new Query();
-        long countTpUser = template.count(query, TP_USER_COLLECTION);
-        long countTpFormDataUser = template.count(query, TP_FORM_DATA_USER_COLLECTION);
-
+        long countTpUser = template.getCollection(TP_USER_COLLECTION).countDocuments();
+        long countTpFormDataUser = template.getCollection(TP_FORM_DATA_USER_COLLECTION).countDocuments();
         if (countTpUser < 1 && countTpFormDataUser < 1) {
             template.save(userDefinition, TP_USER_COLLECTION);
             template.save(userFormDataDefinition, TP_FORM_DATA_USER_COLLECTION);
