@@ -24,6 +24,7 @@ import java.util.Map;
 import static com.techsophy.tsf.account.constants.AccountConstants.TP_FORM_DATA_USER_COLLECTION;
 import static com.techsophy.tsf.account.constants.AccountConstants.TP_USER_COLLECTION;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -35,7 +36,7 @@ class AddAdminUserTest {
     @Mock
     ObjectMapper mockObjectMapper;
     @Mock
-            MongoCollection mongoCollection;
+    MongoCollection mongoCollection;
 
     Map<String,Object> map = new HashMap<>();
     @BeforeEach
@@ -45,18 +46,19 @@ class AddAdminUserTest {
 
     @Test
     void changeSetFormDefinitionTest() throws IOException {
+        MongoCollection mongoCollectionLocal = mock(MongoCollection.class);
         Document document = new Document();
         document.append("abc","value");
         document.append("key","obj");
-        mongoCollection.insertOne(document);
+        mongoCollectionLocal.insertOne(document);
         UserFormDataDefinition userFormDataDefinition = new UserFormDataDefinition(BigInteger.ONE,map,BigInteger.ONE,1);
         UserDefinition userDefinition = new UserDefinition(BigInteger.ONE,"abc","abc","abc","abc","abc@gmail.com","cs");
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(UserDefinition.class))).thenReturn(userDefinition);
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(UserFormDataDefinition.class))).thenReturn(userFormDataDefinition);
-        Mockito.when(template.getCollection(TP_USER_COLLECTION)).thenReturn(mongoCollection);
-        Mockito.when(template.getCollection(TP_FORM_DATA_USER_COLLECTION)).thenReturn(mongoCollection);
+        Mockito.when(template.getCollection(TP_USER_COLLECTION)).thenReturn(mongoCollectionLocal);
+        Mockito.when(template.getCollection(TP_FORM_DATA_USER_COLLECTION)).thenReturn(mongoCollectionLocal);
         addAdminUser.changeSetFormDefinition();
-        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(UserDefinition.class));
+        Mockito.verify(template,Mockito.times(2)).save(any(),any());
     }
 
     @Test
@@ -69,7 +71,7 @@ class AddAdminUserTest {
         Mockito.when(template.getCollection(TP_FORM_DATA_USER_COLLECTION)).thenReturn(mongoCollection);
         Mockito.when(mongoCollection.countDocuments()).thenReturn(2L);
         addAdminUser.changeSetFormDefinition();
-        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(UserDefinition.class));
+        Mockito.verify(template,Mockito.times(0)).save(any(),any());
     }
 
     @Test

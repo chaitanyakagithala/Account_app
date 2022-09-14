@@ -28,6 +28,7 @@ import static com.techsophy.tsf.account.constants.AccountConstants.TP_THEME_COLL
 import static com.techsophy.tsf.account.constants.UserFormDataConstants.ANYSTRING;
 import static com.techsophy.tsf.account.constants.UserPreferencesConstants.ONE;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -63,15 +64,15 @@ class AddThemeTest {
         Mockito.when(mongoCollection.countDocuments()).thenReturn(2L);
         Mockito.when(userPreferencesDefinitionRepository.existsByUserId(any())).thenReturn(true);
         addTheme.changeSetFormDefinition();
-        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class));
-    }
+        Mockito.verify(template,Mockito.times(0)).save(any(),any());    }
 
     @Test
     void changeSetFormDefinitionWithDocumentTest() throws IOException, ParseException {
+        MongoCollection mongoCollectionLocal = mock(MongoCollection.class);
         Document document = new Document();
         document.append("abc","value");
         document.append("key","obj");
-        mongoCollection.insertOne(document);
+        mongoCollectionLocal.insertOne(document);
         UserPreferencesDefinition userPreferencesDefinition = new UserPreferencesDefinition();
         userPreferencesDefinition.setUserId(BigInteger.valueOf(1));
         userPreferencesDefinition.setId(BigInteger.valueOf(1));
@@ -81,11 +82,10 @@ class AddThemeTest {
         ThemesDefinition themesDefinition = new ThemesDefinition(BigInteger.ONE,ANYSTRING,ANYSTRING);
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class))).thenReturn(themesDefinition);
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(UserPreferencesDefinition.class))).thenReturn(userPreferencesDefinition);
-        Mockito.when(template.getCollection(TP_THEME_COLLECTION)).thenReturn(mongoCollection);
+        Mockito.when(template.getCollection(TP_THEME_COLLECTION)).thenReturn(mongoCollectionLocal);
         Mockito.when(userPreferencesDefinitionRepository.existsByUserId(any())).thenReturn(true);
         addTheme.changeSetFormDefinition();
-        Mockito.verify(mockObjectMapper,Mockito.times(1)).readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class));
-    }
+        Mockito.verify(template,Mockito.times(2)).save(any(),any());    }
 
     @Test
     void rollbackTest(){
