@@ -85,7 +85,7 @@ class AddThemeTest {
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), eq(ThemesDefinition.class))).thenReturn(themesDefinition);
         Mockito.when(mockObjectMapper.readValue(any(InputStream.class), eq(UserPreferencesDefinition.class))).thenReturn(userPreferencesDefinition);
         Mockito.when(template.getCollection(TP_THEME_COLLECTION)).thenReturn(mongoCollectionLocal);
-        Mockito.when(template.findById(anyString(), eq(UserDefinition.class))).thenReturn(userDefinition);
+        Mockito.when(template.findById(any(), eq(UserDefinition.class))).thenReturn(userDefinition);
         addTheme.changeSetFormDefinition();
         Mockito.verify(template,Mockito.times(2)).save(any(),any());    }
 
