@@ -21,9 +21,11 @@ public class AccountConstants
  public static final String TP_USER_JSON = "TP_USER.json";
  public static final String TP_SYSTEM_USER_JSON = "TP_SYSTEM_USER.json";
  public static final String TP_USER_THEME_JSON = "TP_USER_THEME.json";
+ public static final String TP_THEME_JSON = "TP_THEME.json";
  public static final String ADD_THEME= "add-theme";
  public static final String USER_DATA_NAME= "userName";
  public static final String EMAIL_ID= "emailId";
+ public static final String ID_VALUE= "821024382412341232";
 
 
 

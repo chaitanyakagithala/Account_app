@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoCollection;
 import com.nimbusds.jose.shaded.json.parser.ParseException;
 import com.techsophy.tsf.account.entity.ThemesDefinition;
+import com.techsophy.tsf.account.entity.UserDefinition;
 import com.techsophy.tsf.account.entity.UserPreferencesDefinition;
 import com.techsophy.tsf.account.repository.UserPreferencesDefinitionRepository;
 import org.bson.Document;
@@ -27,7 +28,7 @@ import java.math.BigInteger;
 import static com.techsophy.tsf.account.constants.AccountConstants.TP_THEME_COLLECTION;
 import static com.techsophy.tsf.account.constants.UserFormDataConstants.ANYSTRING;
 import static com.techsophy.tsf.account.constants.UserPreferencesConstants.ONE;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,17 +59,17 @@ class AddThemeTest {
         byte[] data=new byte[]{Byte.parseByte(ONE)};
         userPreferencesDefinition.setProfilePicture(new Binary(data));
         ThemesDefinition themesDefinition = new ThemesDefinition(BigInteger.ONE,ANYSTRING,ANYSTRING);
-        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class))).thenReturn(themesDefinition);
-        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(UserPreferencesDefinition.class))).thenReturn(userPreferencesDefinition);
+        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), eq(ThemesDefinition.class))).thenReturn(themesDefinition);
+        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), eq(UserPreferencesDefinition.class))).thenReturn(userPreferencesDefinition);
         Mockito.when(template.getCollection(TP_THEME_COLLECTION)).thenReturn(mongoCollection);
         Mockito.when(mongoCollection.countDocuments()).thenReturn(2L);
-        Mockito.when(userPreferencesDefinitionRepository.existsByUserId(any())).thenReturn(true);
         addTheme.changeSetFormDefinition();
         Mockito.verify(template,Mockito.times(0)).save(any(),any());    }
 
     @Test
     void changeSetFormDefinitionWithDocumentTest() throws IOException, ParseException {
         MongoCollection mongoCollectionLocal = mock(MongoCollection.class);
+        String abc = "abc";
         Document document = new Document();
         document.append("abc","value");
         document.append("key","obj");
@@ -78,12 +79,13 @@ class AddThemeTest {
         userPreferencesDefinition.setId(BigInteger.valueOf(1));
         userPreferencesDefinition.setThemeId(BigInteger.valueOf(1));
         byte[] data=new byte[]{Byte.parseByte(ONE)};
+        UserDefinition userDefinition = new UserDefinition(BigInteger.ONE,abc,abc,abc,abc,abc,abc);
         userPreferencesDefinition.setProfilePicture(new Binary(data));
         ThemesDefinition themesDefinition = new ThemesDefinition(BigInteger.ONE,ANYSTRING,ANYSTRING);
-        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(ThemesDefinition.class))).thenReturn(themesDefinition);
-        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), ArgumentMatchers.eq(UserPreferencesDefinition.class))).thenReturn(userPreferencesDefinition);
+        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), eq(ThemesDefinition.class))).thenReturn(themesDefinition);
+        Mockito.when(mockObjectMapper.readValue(any(InputStream.class), eq(UserPreferencesDefinition.class))).thenReturn(userPreferencesDefinition);
         Mockito.when(template.getCollection(TP_THEME_COLLECTION)).thenReturn(mongoCollectionLocal);
-        Mockito.when(userPreferencesDefinitionRepository.existsByUserId(any())).thenReturn(true);
+        Mockito.when(template.findById(anyString(), eq(UserDefinition.class))).thenReturn(userDefinition);
         addTheme.changeSetFormDefinition();
         Mockito.verify(template,Mockito.times(2)).save(any(),any());    }
 
