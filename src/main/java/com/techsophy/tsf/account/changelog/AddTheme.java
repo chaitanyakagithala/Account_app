@@ -36,7 +36,7 @@ public class AddTheme {
         InputStream inputStreamTest1 = new ClassPathResource(pathThemeUser).getInputStream();
         UserPreferencesDefinition userPreferencesDefinition = objectMapper.readValue(inputStreamTest1, UserPreferencesDefinition.class);
         long count = template.getCollection(TP_THEME_COLLECTION).countDocuments();
-        UserDefinition userDefinition = template.findById(ID_VALUE,UserDefinition.class);
+        UserDefinition userDefinition = template.findById(userPreferencesDefinition.getUserId(),UserDefinition.class);
         if(count==0&&userDefinition!=null) {
             template.save(themesDefinition, TP_THEME_COLLECTION);
             template.save(userPreferencesDefinition,TP_USER_PREFERENCE_COLLECTION);
