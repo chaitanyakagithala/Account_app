@@ -59,12 +59,6 @@ class UserDefinitionServiceTest
     UserServiceImpl userService;
     private static final String USER_DATA = "testdata/user-schema.json";
 
-//    @BeforeAll
-//    static void setUp()
-//    {
-//        MockitoAnnotations.openMocks(UserServiceImpl.class);
-//    }
-
     @Test
     void getFormByUserId() throws IOException
     {

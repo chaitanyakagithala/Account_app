@@ -1,5 +1,6 @@
 package com.techsophy.tsf.account.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techsophy.idgenerator.IdGeneratorImpl;
 import com.techsophy.tsf.account.config.GlobalMessageSource;
@@ -48,7 +49,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @EnableWebMvc
 @ActiveProfiles("test")
-//@ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BulkUserServiceTest
 {
@@ -103,7 +103,6 @@ class BulkUserServiceTest
         Mockito.when(userServiceImpl.getCurrentlyLoggedInUserId()).thenReturn(list);
         MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input));
         PaginationResponsePayload paginationResponsePayload = new PaginationResponsePayload(list,1,1L,1,1,1);
-//        Mockito.when(accountUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
         when(this.objectMapper.convertValue(any(),ArgumentMatchers.eq(String.class))).thenReturn("abc,abc");
         Mockito.when(bulkUploadDefinintionRepository.save(any())).thenReturn(bulkUserDefinition);
         Mockito.when(userManagementInKeyCloak.getAllGroups()).thenReturn(Stream.of(schema1)).thenReturn(Stream.of(schema1)).thenReturn(Stream.of(schema1));
@@ -231,9 +230,6 @@ class BulkUserServiceTest
         BulkUserDefinition bulkUserDefinition = new BulkUserDefinition(BigInteger.valueOf(1),map,BigInteger.valueOf(1),"status");
         PaginationResponsePayload paginationResponsePayload = new PaginationResponsePayload(list,1,1L,1,1,1);
         Page<BulkUserDefinition> page = new PageImpl<>(List.of(bulkUserDefinition));
-//        Mockito.when(bulkUploadDefinintionRepository.findAll(pageable)).thenReturn(page);
-//        Mockito.when(bulkUploadDefinintionRepository.findBulkUsersByQPageable("q",pageable)).thenReturn(page);
-//        Mockito.when(tokenUtils.getPaginationResponsePayload(any(),any())).thenReturn(paginationResponsePayload);
         Assertions.assertNotNull(bulkUserServiceImplementation.getAllBulkUsers(DOCUMENT_ID,"123",CREATED_ON,"asc"));
     }
 
@@ -245,4 +241,12 @@ class BulkUserServiceTest
         bulkUserServiceImplementation.deleteBulkUserById("1");
         Assertions.assertThrows(BulkUserNotFoundException.class,()->bulkUserServiceImplementation.deleteBulkUserById("1"));
     }
+    @Test
+    void bulkUploadStatus() throws JsonProcessingException {
+        BulkUploadSchema bulkUploadSchema = new BulkUploadSchema("1",map,"1","status");
+        Mockito.when(userServiceImpl.getCurrentlyLoggedInUserId()).thenReturn(list);
+        Mockito.when(bulkUploadDefinintionRepository.existsById(BigInteger.valueOf(1))).thenReturn(false);
+        Assertions.assertThrows(BulkUserNotFoundException.class,()->bulkUserServiceImplementation.bulkUpdateStatus(bulkUploadSchema));
+    }
+
 }

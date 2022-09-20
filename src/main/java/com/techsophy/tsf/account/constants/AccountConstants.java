@@ -8,12 +8,26 @@ public class AccountConstants
 {
  //DatabaseChangeLog
  public static final String ORDER_1="1";
- public static final String ORDER_2="2";
+ public static final String ORDER_2="100";
+ public static final String ORDER_3="101";
+ public static final String ORDER_5="103";
  public static final String SYSTEM_VERSION_1="1";
  public static final String ADD_ADMIN_USER= "add-admin-user01";
+ public static final String ADD_SYSTEM_USER= "add-system-user01";
+ public static final String ADD_FORM_SYSTEM_USER= "add-form_system-user01";
  public static final String ADD_FORMDATA_ADMIN_USER= "add-formdata-admin-user01";
  public static final String TP_FORMDATA_USER_JSON ="TP_FORMDATA_USER.json";
+ public static final String TP_FORMDATA_SYSTEM_USER_JSON ="TP_FORMDATA_SYSTEM_USER.json";
  public static final String TP_USER_JSON = "TP_USER.json";
+ public static final String TP_SYSTEM_USER_JSON = "TP_SYSTEM_USER.json";
+ public static final String TP_USER_THEME_JSON = "TP_USER_THEME.json";
+ public static final String TP_THEME_JSON = "TP_THEME.json";
+ public static final String ADD_THEME= "add-theme";
+ public static final String USER_DATA_NAME= "userName";
+ public static final String EMAIL_ID= "emailId";
+ public static final String ID_VALUE= "821024382412341232";
+
+
 
  //JWTRoleConverter
  public static final String CLIENT_ROLES="clientRoles";

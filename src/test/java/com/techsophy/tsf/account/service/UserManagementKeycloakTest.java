@@ -358,7 +358,7 @@ import static org.mockito.Mockito.*;
         Assertions.assertThrows(InvalidInputException.class,()->userManagementInKeyCloak.createUser(userDataSchema));
         //Map<String, Object> response1 = userManagementInKeyCloak.createUser(userDataSchema);
         Assertions.assertThrows(InvalidInputException.class,()->userManagementInKeyCloak.createUser(userDataSchema1));
-       // Assertions.assertThrows(RuntimeException.class,()->userManagementInKeyCloak.createUser(userDataSchema));
+        // Assertions.assertThrows(RuntimeException.class,()->userManagementInKeyCloak.createUser(userDataSchema));
         //Assertions.assertThrows(InvalidInputException.class,()->userManagementInKeyCloak.createUser(userDataSchema));
         //Assertions.assertNotNull(response1);
         //Assertions.assertNotNull(response2);

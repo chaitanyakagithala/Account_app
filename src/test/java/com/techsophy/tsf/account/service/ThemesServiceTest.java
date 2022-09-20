@@ -119,7 +119,6 @@ class ThemesServiceTest
         ThemesSchema themesSchema = objectMapper.readValue(themeData, ThemesSchema.class);
         ThemesSchema themesSchema1 = new ThemesSchema(null,NAME,CONTENT);
         ThemesDefinition themesDefinition = objectMapper.readValue(themeData, ThemesDefinition.class);
-//        when(mockObjectMapper.convertValue(any(), eq(ThemesDefinition.class))).thenReturn(themesDefinition);
         when(themesDefinitionRepository.save(any())).thenReturn(themesDefinition.withId(BigInteger.valueOf(Long.parseLong(ThemesConstants.ID))));
         when(mockObjectMapper.convertValue(any(),eq(ThemesResponse.class ))).thenReturn(new ThemesResponse(ThemesConstants.ID));
         when(themesDefinitionRepository.findById((BigInteger) any())).thenReturn(Optional.of(new ThemesDefinition(BigInteger.valueOf(Long.parseLong(ID)), NAME, CONTENT)));
@@ -214,26 +213,6 @@ class ThemesServiceTest
         Assertions.assertNotNull(responseEntity);
     }
 
-//    @Test
-//    void uploadThemeTest() throws IOException
-//    {
-//        ObjectMapper objectMapper=new ObjectMapper();
-//        @Cleanup InputStream stream=new ClassPathResource(DOC_UPLOAD_DATA).getInputStream();
-//        String themeData=new String(stream.readAllBytes());
-//        UploadSchema uploadSchema=objectMapper.readValue(themeData,UploadSchema.class);
-//        UploadSchema uploadSchema1 = new UploadSchema(null,"name","abc");
-//        ThemesDefinition themesDefinition=objectMapper.convertValue(uploadSchema,ThemesDefinition.class);
-//        when(mockObjectMapper.convertValue(any(),eq(ThemesDefinition.class))).thenReturn(themesDefinition);
-//        when(themesDefinitionRepository.save(any())).thenReturn(themesDefinition.withId(BigInteger.valueOf(Long.parseLong(ThemesConstants.ID))));
-//        MockMultipartFile jsonFile = new MockMultipartFile("test.json", "", "application/json", "{\"key1\": \"value1\"}".getBytes());
-//        when(mockObjectMapper.readValue(anyString(),eq(UploadSchema.class))).thenReturn(uploadSchema1).thenReturn(uploadSchema);
-//        when(mockObjectMapper.convertValue(any(),eq(ThemesResponse.class))).thenReturn(new ThemesResponse(ThemesConstants.ID));
-//        when(idGenerator.nextId()).thenReturn(BigInteger.valueOf(1));
-//        MockMultipartFile theme2=new MockMultipartFile("theme2",stream.readAllBytes());
-//        themesServiceImplementation.uploadTheme(theme2,themeName );
-//        themesServiceImplementation.uploadTheme(jsonFile,themeName );
-//        verify(themesDefinitionRepository,times(2)).save(any());
-//    }
 
     @Test
     void uploadThemeTest() throws IOException {

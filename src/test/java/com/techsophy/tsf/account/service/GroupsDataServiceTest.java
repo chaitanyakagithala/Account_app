@@ -74,8 +74,6 @@ class GroupsDataServiceTest {
     @Test
     void getAllGroups() throws Exception {
         Long l = 1L;
-        // GroupsDataSchema groupsDataSchema = new GroupsDataSchema("123", "test", "description", "e8d5cea9-1215-45e9-b54a-0f7a2d6e0880",
-        //    roles ,"123", Instant.now(),"createdByName","123",Instant.now(),"updatedByName");
         GroupDefinition groupDefinition = new GroupDefinition(BigInteger.valueOf(1), "abc", "abc", "abc");
         Mockito.when(groupRepository.findGroupsByQSorting("abc", null)).thenReturn(List.of(groupDefinition));
         groupsDataServiceImpl.getAllGroups("abc", null, null);
@@ -166,87 +164,26 @@ class GroupsDataServiceTest {
         verify(mockTokenUtils, times(1)).getPaginationResponsePayload(groupDefinitions, list);
     }
 
-//    @Test
-//    void getGroupsById() throws Exception
-//    {
-//      ObjectMapper mapper = new ObjectMapper();
-//        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        map.put("foo", "bar");
-//        map.put(AccountConstants.REALM_ROLES,List.of("abc"));
-//        list.add(map);
-//        String json = mapper.writeValueAsString(list);
-//        String response1=RESPONSE;
-//        String response=json;
-//        WebClient webClient= WebClient.builder().build();
-//        when(webClientWrapper.createWebClient(any())).thenReturn(webClient);
-//        when(mockObjectMapper.readValue(anyString(),any(TypeReference.class))).thenReturn(map);
-//        GroupDefinition groupDefinition = new GroupDefinition( BigInteger.valueOf(1),"abc","abc","1");
-//        when(groupRepository.findById(BigInteger.valueOf(1))).thenReturn(Optional.of(groupDefinition));
-//        GroupsDataSchema groupsDataSchema = new GroupsDataSchema("1", "test", "description", "e8d5cea9-1215-45e9-b54a-0f7a2d6e0880",
-//                roles ,"123", Instant.now(),"createdByName","123",Instant.now(),"updatedByName");
-//        when(mockObjectMapper.convertValue(any(),eq(GroupsDataSchema.class))).thenReturn(groupsDataSchema);
-//        Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(),anyString(),eq(null))).thenReturn(response1).thenReturn(response).thenReturn(null);
-//       Mockito.when(mockObjectMapper.readValue(anyString(), any(TypeReference.class))).thenReturn(map).thenReturn(List.of(new HashMap<String,Object>()));
-//      //  Mockito.when(mockObjectMapper.readValue(anyString(),any(Object.class())).thenReturn(values);
-//        groupsDataServiceImpl.getGroupById("1");
-//        Assertions.assertThrows(GroupsNotFoundException.class,()->groupsDataServiceImpl.getGroupById("1"));
-//    }
-
-//    @Test
-//    void assignRolesToGroupTest() throws Exception
-//    {
-//        GroupDefinition groupDefinition = new GroupDefinition( BigInteger.valueOf(1),"abc","abc","1");
-//        List<String> list = new ArrayList<>();
-//        list.add("role");
-//        List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
-//        Map<String, Object> map1 = new HashMap<String, Object>();
-//        map1.put("name", "role");
-//        map1.put(AccountConstants.REALM_ROLES,List.of("abc"));
-//        list1.add(map1);
-//        AssignGroupRoles assignGroupRoles = new AssignGroupRoles(list);
-//        String string="abc";
-//        WebClient webClient= WebClient.builder().build();
-//        when(webClientWrapper.createWebClient(any())).thenReturn(webClient);
-//        when(groupRepository.existsById(BigInteger.valueOf(1))).thenReturn(true);
-//        when(groupRepository.findById(BigInteger.valueOf(1))).thenReturn(Optional.of(groupDefinition));
-//        String response1=RESPONSE;
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        map.put("foo", "bar");
-//        map.put(AccountConstants.REALM_ROLES,List.of("abc"));
-//        Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class),anyString(),anyString(),eq(null))).thenReturn(response1).thenReturn(response1);
-//        Mockito.when(mockObjectMapper.readValue(anyString(), any(TypeReference.class))).thenReturn(list1);
-//        groupsDataServiceImpl.assignRolesToGroup("1",assignGroupRoles);
-//        verify(groupRepository,times(1)).existsById(BigInteger.valueOf(1));
-//    }
-
     @Test
     void getGroupByIdTest() throws JsonProcessingException {
         String response = RESPONSE;
-
         List<String> list = new ArrayList<>();
         list.add("admin");
         list.add("user");
-
         List<Map<String, Object>> list1 = new ArrayList<>();
         Map<String, Object> map1 = new HashMap<>();
         map1.put("name", "role");
         map1.put(AccountConstants.REALM_ROLES,List.of("abc"));
         list1.add(map1);
-
-
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("abc");
         arrayList.add("bcd");
         LinkedHashMap linkedHashMap = new LinkedHashMap<>();
         linkedHashMap.put(arrayList.get(0),"2");
         linkedHashMap.put(arrayList.get(1),"4");
-
         Map<String, Object> map = new HashMap<>();
-        //map.put("foo", "bar");
         map.put(AccountConstants.REALM_ROLES,List.of("abc"));
         map.put(AccountConstants.CLIENT_ROLES,linkedHashMap);
-
         GroupDefinition groupDefinition = new GroupDefinition(BigInteger.valueOf(10), "abc", "abc", "1");
         GroupsDataSchema groupsDataSchema = new GroupsDataSchema("123", "test", "description", "e8d5cea9-1215-45e9-b54a-0f7a2d6e0880",
                 roles, "123", Instant.now(), "createdByName", "123", Instant.now(), "updatedByName");
@@ -295,7 +232,6 @@ class GroupsDataServiceTest {
         when(groupRepository.existsById(BigInteger.valueOf(Long.parseLong("10")))).thenReturn(true);
         when(groupRepository.findById(BigInteger.valueOf(Long.parseLong("10")))).thenReturn(Optional.of(groupDefinition));
         when(webClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), eq(null))).thenReturn(RESPONSE);
-//        when(mockObjectMapper.readValue(anyString(),eq(new TypeReference<>(){}))).thenReturn(list1);
         when(userManagementInKeyCloak.getClientMap(any())).thenReturn(map);
         when(userManagementInKeyCloak.getAllClientAndDefaultRoles()).thenReturn(map2);
         groupsDataServiceImpl.assignRolesToGroup("10",assignGroupRoles);

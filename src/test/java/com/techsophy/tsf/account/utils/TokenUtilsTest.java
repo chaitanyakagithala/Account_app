@@ -26,10 +26,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.AccessDeniedException;
+import java.util.*;
 
 import static com.techsophy.tsf.account.constants.ThemesConstants.*;
 import static com.techsophy.tsf.account.constants.GroupsDataServiceConstants.RESPONSE;
@@ -159,5 +157,53 @@ class TokenUtilsTest {
         List<String> response1 = tokenUtils.getClientRoles("token");
         Assertions.assertNotNull(response1);
         //Assertions.assertThrows(AccessDeniedException.class,()->tokenUtils.getClientRoles("token"));
+    }
+    @Test
+    void getClientRolesTest1() throws JsonProcessingException {
+        String abc = "";
+        List<String> list = new ArrayList<>();
+        list.add("admin");
+        list.add("user");
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "role");
+        map.put(AccountConstants.CLIENT_ROLES,List.of("abc"));
+        String response = RESPONSE;
+        WebClient webClient = WebClient.builder().build();
+        when(mockWebClientWrapper.createWebClient(any())).thenReturn(webClient);
+        when(mockWebClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), eq(null))).thenReturn(abc);
+        Assertions.assertThrows(AccessDeniedException.class,()->tokenUtils.getClientRoles("token"));
+    }
+    @Test
+    void getClientRolesTest2() throws JsonProcessingException {
+        String abc = "";
+        List<String> list = new ArrayList<>();
+        List<String> list1 = new ArrayList<>();
+        list.add("admin");
+        list.add("user");
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "role");
+        map.put(AccountConstants.CLIENT_ROLES,List.of("abc"));
+        String response = RESPONSE;
+        WebClient webClient = WebClient.builder().build();
+        when(mockWebClientWrapper.createWebClient(any())).thenReturn(webClient);
+        when(mockWebClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), eq(null))).thenReturn(response).thenReturn(" ");
+        when(this.mockObjectMapper.readValue(anyString(),eq(Map.class))).thenReturn(map);
+        when(this.mockObjectMapper.convertValue(any(), eq(List.class))).thenReturn(list1);
+        tokenUtils.getClientRoles("token");
+    }
+    @Test
+    void getClientRolesTest3() throws JsonProcessingException {
+        List<String> list = new ArrayList<>();
+        list.add("admin");
+        list.add("user");
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "role");
+       // map.put(AccountConstants.CLIENT_ROLES,List.of("abc"));
+        String response = RESPONSE;
+        WebClient webClient = WebClient.builder().build();
+        when(mockWebClientWrapper.createWebClient(any())).thenReturn(webClient);
+        when(mockWebClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), eq(null))).thenReturn(response).thenReturn(" ");
+        when(this.mockObjectMapper.readValue(anyString(),eq(Map.class))).thenReturn(map);
+        tokenUtils.getClientRoles("token");
     }
 }
