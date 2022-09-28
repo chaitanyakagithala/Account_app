@@ -40,21 +40,6 @@ workflows:
               only: /dev/
 
 
-
-  # tagged-build:
-  #   jobs:
-  #     - buildMS:
-  #         filters:
-  #           tags:
-  #             only: /v*.*/
-  # main-build:
-  #   jobs:
-  #     - buildMS:
-  #         filters:
-  #           branches:
-  #             only:
-  #               - main
-
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -65,13 +50,23 @@ jobs:
     steps:
       - run: |
           echo "Build MS"
+          mkdir build
+          echo "artifact created" > build/message.txt
+      - persist_to_workspace:
+          root: .
+          paths:
+            - "build"
 
   publishMS:
     docker: 
       - image: cimg/openjdk:11.0.11
     steps:
+      - attach_workspace:
+          at: .
       - run: |
           echo "publish MS"
+          ls
+          ls build
 
   deployMS:
     docker: 
