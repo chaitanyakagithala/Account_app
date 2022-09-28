@@ -91,11 +91,11 @@ jobs:
           name: "Push docker image"
           command: |
             if [[ -z "$CIRCLE_TAG" ]] ; 
-            then  
-              if [[ "$CIRCLE_BRANCH" == "dev" ]] ; then TAG="v0.0.0-alpha" fi 
+            then  if [[ "$CIRCLE_BRANCH" == "dev" ]] ; then TAG="v0.0.0-alpha"; fi 
             else 
               TAG=$CIRCLE_TAG; 
             fi 
+            if [[ -z "$TAG" ]]; then exit 1; fi
             echo $TS_DOCKER_PUB_PASS | docker login -u $TS_DOCKER_PUB_USR --password-stdin
             REPONAME=$TS_DOCKER_PUB_USR/$CIRCLE_PROJECT_REPONAME
             docker tag $REPONAME:latest $REPONAME:$TAG
