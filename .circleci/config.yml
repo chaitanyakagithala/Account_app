@@ -84,8 +84,8 @@ jobs:
           at: .
       - run: |
           echo "publish MS"
-          ls
-          ls build
+          ls -lst
+          ls -lst build
 
   deployMS:
     docker: 
