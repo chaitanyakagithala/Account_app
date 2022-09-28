@@ -48,10 +48,30 @@ jobs:
     docker: 
       - image: cimg/openjdk:11.0.11
     steps:
-      - run: |
-          echo "Build MS"
-          mkdir build
-          echo "artifact created" > build/message.txt
+      # - run: |
+      #     echo "Build MS"
+      #     mkdir build
+      #     echo "artifact created" > build/message.txt
+      - checkout
+      - run:
+          name: fix permission denied
+          command: chmod +x ./gradlew fail for now
+          # command: exit 0
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - restore_cache:
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
+      - run:
+          name: Install dependencies
+          command: ./gradlew clean build
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - persist_to_workspace:
           root: .
           paths:
@@ -89,8 +109,8 @@ jobs:
       - checkout
       - run:
           name: fix permission denied
-          # command: chmod +x ./gradlew fail for now
-          command: exit 0
+          command: chmod +x ./gradlew fail for now
+          # command: exit 0
       - setup_remote_docker:
           docker_layer_caching: false
       - restore_cache:
