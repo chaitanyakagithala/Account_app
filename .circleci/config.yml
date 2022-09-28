@@ -35,9 +35,6 @@ workflows:
           context: ossContext
           requires:
             - deployMS
-          filters:
-            branches:
-              only: /dev/
 
 
 # Define a job to be invoked later in a workflow.
@@ -154,5 +151,3 @@ jobs:
           docker build . -t $REPONAME:$TAG
           #docker tag $REPONAME:latest $REPONAME:$TAG
           docker push $REPONAME:$TAG
-
-
