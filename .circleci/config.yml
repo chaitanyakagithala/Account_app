@@ -95,7 +95,7 @@ jobs:
             else 
               TAG=$CIRCLE_TAG; 
             fi 
-            if [[ -z "$TAG" ]]; then exit 1; fi
+            if [[ -z "$TAG" ]]; then exit 0; fi
             echo $TS_DOCKER_PUB_PASS | docker login -u $TS_DOCKER_PUB_USR --password-stdin
             REPONAME=$TS_DOCKER_PUB_USR/$CIRCLE_PROJECT_REPONAME
             docker tag $REPONAME:latest $REPONAME:$TAG
