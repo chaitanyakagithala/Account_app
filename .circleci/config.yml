@@ -55,8 +55,7 @@ jobs:
       - checkout
       - run:
           name: fix permission denied
-          command: chmod +x ./gradlew fail for now
-          # command: exit 0
+          command: chmod +x ./gradlew
       - restore_cache:
           key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - restore_cache:
