@@ -82,14 +82,27 @@ jobs:
       - checkout          
       - attach_workspace:
           at: .
+      - setup_remote_docker:
+          docker_layer_caching: false
       - run:
           name: "Build docker image"
+          command: |
+            REPONAME=$TS_DOCKER_PUB_USR/$CIRCLE_PROJECT_REPONAME
+            docker build . -t $REPONAME:latest
+
+      - run:
+          name: "Push docker image"        
+          when: 
+            or:
+              - equal: [dev, << pipeline.git.branch >> ]
+              - equal: [true, << pipeline.git.tag >> ]
           command: |
             if [[ -z "$CIRCLE_TAG" ]] ;  then TAG="v0.0.0-alpha" else TAG=$CIRCLE_TAG; fi            
             echo $TS_DOCKER_PUB_PASS | docker login -u $TS_DOCKER_PUB_USR --password-stdin
             REPONAME=$TS_DOCKER_PUB_USR/$CIRCLE_PROJECT_REPONAME
-            docker build . -t $REPONAME:$TAG
+            docker tag $REPONAME:latest $REPONAME:$TAG
             docker push $REPONAME:$TAG
+
 
 
   deployMS:
