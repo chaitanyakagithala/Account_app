@@ -4,19 +4,19 @@ version: 2.1
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  tagged-release:
-    when: << pipeline.git.tag >>
-    jobs:
-      - releaseMS:
-          context: ossContext
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+  # tagged-release:
+  #   when: << pipeline.git.tag >>
+  #   jobs:
+  #     - releaseMS:
+  #         context: ossContext
+  #         filters:
+  #           tags:
+  #             only: /^v.*/
+  #           branches:
+  #             ignore: /.*/
   commit-flow:
-    when: 
-      not: << pipeline.git.tag >>
+    # when: 
+    #   not: << pipeline.git.tag >>
     jobs:
       - buildMS:
           context: ossContext
