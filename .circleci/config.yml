@@ -121,8 +121,7 @@ jobs:
       - checkout
       - run:
           name: fix permission denied
-          command: chmod +x ./gradlew fail for now
-          # command: exit 0
+          command: chmod +x ./gradlew 
       - setup_remote_docker:
           docker_layer_caching: false
       - restore_cache:
