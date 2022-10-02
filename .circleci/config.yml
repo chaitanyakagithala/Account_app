@@ -27,7 +27,9 @@ workflows:
           requires: 
             - buildMS
       - deployMS:
-          context: ossContext
+          context: 
+            - ossContext
+            - devDeployment
           requires:
             - publishMS
           filters:
@@ -110,6 +112,7 @@ jobs:
           command: echo "deploy MS"
       - checkout
       - kubernetes/install-kubectl
+      - kubernetes/install-kubeconfig
       - run: 
           command: |
             kubectl version
