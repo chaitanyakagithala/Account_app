@@ -29,7 +29,7 @@ workflows:
       - deployMS:
           context: 
             - ossContext
-            - devDeployment
+            - deployment
           requires:
             - publishMS
           filters:
@@ -105,13 +105,15 @@ jobs:
 
 
   deployMS:
+    
     docker: 
       - image: cimg/openjdk:11.0.11
     steps:
       - run:
           command: echo "deploy MS"
       - checkout
-      - kubernetes/install-kubectl
+      - kubernetes/install-kubectl:
+          kubectl-version: $KUBECTL_VERSION
       - kubernetes/install-kubeconfig
       - run: 
           command: |
