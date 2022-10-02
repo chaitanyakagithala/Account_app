@@ -32,7 +32,7 @@ workflows:
             - publishMS
           filters:
             branches:
-              only: /\.*cibuild/
+              only: /220927_cibuild/
       - testMS:
           context: ossContext
           requires:
