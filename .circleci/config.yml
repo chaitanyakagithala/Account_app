@@ -117,8 +117,9 @@ jobs:
       - kubernetes/install-kubeconfig
       - run: 
           command: |
+            $SUDO apt-get update && $SUDO apt-get install -y gettext-base
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
-            cat docker.env | envsubst > config-map.env
+            envsubst < docker.env > config-map.env
             kubectl create configmap $CONFIG_MAP --from-file=config-map.env
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
