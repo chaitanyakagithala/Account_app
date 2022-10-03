@@ -15,7 +15,7 @@ spec:
         name: account-app
     spec:
       containers:
-      - image: techsophyofficial/awgment-app-account:v0.0.0-alpha
+      - image: techsophyofficial/awgment-app-account:$IMAGE_VERSION
 #      - image: tsdevopsteam/platform:account-app-$BUILD_NUMBER
         name: account-app
         envFrom:
