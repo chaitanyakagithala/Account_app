@@ -20,12 +20,12 @@ spec:
         name: account-app
         envFrom:
         - configMapRef:
-            name: augmnt-env
+            name: $CONFIG_MAP-env
 #            name: accountapp-env
         ports:
         - containerPort: 8080
-      imagePullSecrets:
-      - name: ts-platform
+#      imagePullSecrets:
+#      - name: ts-platform
 
 
 
