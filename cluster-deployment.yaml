@@ -20,7 +20,7 @@ spec:
         name: account-app
         envFrom:
         - configMapRef:
-            name: $CONFIG_MAP-env
+            name: $CONFIG_MAP
 #            name: accountapp-env
         ports:
         - containerPort: 8080
