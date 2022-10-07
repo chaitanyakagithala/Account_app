@@ -105,23 +105,20 @@ jobs:
             docker push $REPONAME:$TAG
 
 
-
   deployMS:    
     docker:
       - image: cimg/base:stable
     steps:
       - checkout      
       - envsubst/install
+      - kubernetes/install-kubectl:
+          kubectl-version: $KUBECTL_VERSION
+      - kubernetes/install-kubeconfig      
       - run: 
           command: |
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
             envsubst < docker.env > config-map.env
-            kubectl create configmap $CONFIG_MAP --from-file=config-map.env
-
-      - kubernetes/install-kubectl:
-          kubectl-version: $KUBECTL_VERSION
-      - kubernetes/install-kubeconfig
-
+            kubectl create configmap $CONFIG_MAP-env --from-file=config-map.env
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           envsubst: true
