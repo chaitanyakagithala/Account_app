@@ -15,19 +15,13 @@ spec:
     spec:
       containers:
       - image: techsophyofficial/awgment-app-account:$IMAGE_VERSION
-#      - image: tsdevopsteam/platform:account-app-$BUILD_NUMBER
         name: account-app
         envFrom:
         - configMapRef:
             name: $CONFIG_MAP
-#            name: accountapp-env
+            imagePullPolicy: Always
         ports:
         - containerPort: 8080
-#      imagePullSecrets:
-#      - name: ts-platform
-
-
-
 ---
 apiVersion: v1
 kind: Service
