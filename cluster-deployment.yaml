@@ -16,10 +16,11 @@ spec:
       containers:
       - image: techsophyofficial/awgment-app-account:$IMAGE_VERSION
         name: account-app
+        imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: $CONFIG_MAP
-            imagePullPolicy: Always
+
         ports:
         - containerPort: 8080
 ---
