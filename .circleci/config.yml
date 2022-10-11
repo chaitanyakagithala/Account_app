@@ -122,12 +122,13 @@ jobs:
             if [[ -z "$NAMESPACE" ]]; then NAMESAPCE=default; fi
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
             envsubst < docker.env > config-map.env
-            cat config-map.env
             kubectl create configmap $CONFIG_MAP --from-file=config-map.env -o yaml --dry-run=client | kubectl apply -n ${NAMESPACE} -f -
-      - kubernetes/create-or-update-resource:
+            envsubst < cluster-deployment.yaml > env-cluster-deployment.yaml
+            cat env-cluster-deployment.yaml
+        kubernetes/create-or-update-resource:
           get-rollout-status: true
-          envsubst: true
-          resource-file-path: cluster-deployment.yaml
+          envsubst: false
+          resource-file-path: env-cluster-deployment.yaml
           show-kubectl-command: true
 
 
