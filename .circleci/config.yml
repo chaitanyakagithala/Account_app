@@ -120,6 +120,11 @@ jobs:
       - run:
           name: install config map
           command: |
+            if [[ -z "$DEPLOYMENT_DISABLED" ]]; 
+            then 
+              echo "deployment disabled"
+              exit 0;
+            fi
             if [[ -z "$NAMESPACE" ]]; then NAMESAPCE=default; fi            
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
             envsubst < docker.env > config-map.env            
@@ -128,6 +133,7 @@ jobs:
 
       - kubernetes/create-or-update-resource:
           resource-file-path: env-cluster-deployment.yaml
+          namespace: $NAMESPACE
           show-kubectl-command: true
 
 
