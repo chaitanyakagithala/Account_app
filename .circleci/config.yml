@@ -7,16 +7,6 @@ orbs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  # tagged-release:
-  #   when: << pipeline.git.tag >>
-  #   jobs:
-  #     - releaseMS:
-  #         context: ossContext
-  #         filters:
-  #           tags:
-  #             only: /^v.*/
-  #           branches:
-  #             ignore: /.*/
   commit-flow:
     # when: 
     #   not: << pipeline.git.tag >>
@@ -124,9 +114,10 @@ jobs:
       - run:
           name: install config map
           command: | 
-            if [[ -z "$DEPLOYMENT_ENABLED" ]]; 
+            if [[ -z "$STOP_DEPLOYMENT" ]]; 
             then 
-              echo "Stop deployment - $DEPLOYMENT_ENABLED";
+            else 
+              echo "Stop deployment - $STOP_DEPLOYMENT";
               circleci-agent step halt
             fi    
             if [[ -z "$NAMESPACE" ]]; then NAMESAPCE=default; fi            
@@ -149,39 +140,50 @@ jobs:
       - run: |
           echo "test MS"
 
-  releaseMS:
-    docker:
-      - image: cimg/openjdk:11.0.11
-    steps:
-      - checkout
-      - run:
-          name: fix permission denied
-          command: chmod +x ./gradlew 
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - restore_cache:
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - restore_cache:
-          key: v1-gradle-cache-{{ checksum "build.gradle" }}
-      - run:
-          name: Install dependencies
-          command: ./gradlew clean build
-      # - attach_workspace:
-      #     at: build
-      - save_cache:
-          paths:
-            - ~/.gradle/wrapper
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - save_cache:
-          paths:
-            - ~/.gradle/caches
-          key: v1-gradle-cache-{{ checksum "build.gradle" }}
 
-      - run: |
-          if [[ -z "$CIRCLE_TAG" ]] ;  then exit 1; fi
-          TAG=$CIRCLE_TAG
-          echo $TS_DOCKER_PUB_PASS | docker login -u $TS_DOCKER_PUB_USR --password-stdin
-          REPONAME=$TS_DOCKER_PUB_USR/$CIRCLE_PROJECT_REPONAME
-          docker build . -t $REPONAME:$TAG
-          #docker tag $REPONAME:latest $REPONAME:$TAG
-          docker push $REPONAME:$TAG
+  # tagged-release:
+  #   when: << pipeline.git.tag >>
+  #   jobs:
+  #     - releaseMS:
+  #         context: ossContext
+  #         filters:
+  #           tags:
+  #             only: /^v.*/
+  #           branches:
+  #             ignore: /.*/
+  # releaseMS:
+  #   docker:
+  #     - image: cimg/openjdk:11.0.11
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: fix permission denied
+  #         command: chmod +x ./gradlew 
+  #     - setup_remote_docker:
+  #         docker_layer_caching: false
+  #     - restore_cache:
+  #         key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+  #     - restore_cache:
+  #         key: v1-gradle-cache-{{ checksum "build.gradle" }}
+  #     - run:
+  #         name: Install dependencies
+  #         command: ./gradlew clean build
+  #     # - attach_workspace:
+  #     #     at: build
+  #     - save_cache:
+  #         paths:
+  #           - ~/.gradle/wrapper
+  #         key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+  #     - save_cache:
+  #         paths:
+  #           - ~/.gradle/caches
+  #         key: v1-gradle-cache-{{ checksum "build.gradle" }}
+
+  #     - run: |
+  #         if [[ -z "$CIRCLE_TAG" ]] ;  then exit 1; fi
+  #         TAG=$CIRCLE_TAG
+  #         echo $TS_DOCKER_PUB_PASS | docker login -u $TS_DOCKER_PUB_USR --password-stdin
+  #         REPONAME=$TS_DOCKER_PUB_USR/$CIRCLE_PROJECT_REPONAME
+  #         docker build . -t $REPONAME:$TAG
+  #         #docker tag $REPONAME:latest $REPONAME:$TAG
+  #         docker push $REPONAME:$TAG
