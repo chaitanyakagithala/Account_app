@@ -112,9 +112,9 @@ jobs:
           kubectl-version: $KUBECTL_VERSION
       - kubernetes/install-kubeconfig 
       - run:
-          name: install config map
+          name: prepare deployment
           command: | 
-            if [[ -z "$STOP_DEPLOYMENT" ]]; then echo "deploy MS";
+            if [[ -z "$STOP_DEPLOYMENT" ]]; then echo "Going to deploy MS";
             else 
               echo "Stop deployment - $STOP_DEPLOYMENT";
               circleci-agent step halt;
@@ -123,7 +123,7 @@ jobs:
             if [[ -z "$NAMESPACE" ]]; then NAMESAPCE=default; fi            
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
             envsubst < docker.env > config-map.env            
-            kubectl create configmap $CONFIG_MAP --from-env-file=config-map.env -o yaml | kubectl apply -n ${NAMESPACE} -f -
+            kubectl create configmap $CONFIG_MAP --from-env-file=config-map.env -o yaml --dry-run | kubectl apply -n ${NAMESPACE} -f -
             envsubst < cluster-deployment.yaml > env-cluster-deployment.yaml
 
       - kubernetes/create-or-update-resource:
