@@ -114,7 +114,7 @@ jobs:
     parameters:
       run-deploy:
         type: env_var_name
-        default: RUN_DEPLOYMENT    
+        default: ENABLE_DEPLOYMENT    
     steps:
       - checkout      
       - envsubst/install
