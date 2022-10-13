@@ -124,15 +124,15 @@ jobs:
       - run:
           name: install config map
           command: | 
-            if [[ -z "$STOP_DEPLOYMENT" ]]; 
+            if [[ -z "$DEPLOYMENT_ENABLED" ]]; 
             then 
-              echo "Stop deployment - $STOP_DEPLOYMENT";
+              echo "Stop deployment - $DEPLOYMENT_ENABLED";
               circleci-agent step halt
             fi    
             if [[ -z "$NAMESPACE" ]]; then NAMESAPCE=default; fi            
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
             envsubst < docker.env > config-map.env            
-            kubectl create configmap $CONFIG_MAP --from-env-file=config-map.env -o yaml --dry-run=client | kubectl apply -n ${NAMESPACE} -f -
+            kubectl create configmap $CONFIG_MAP --from-env-file=config-map.env -o yaml | kubectl apply -n ${NAMESPACE} -f -
             envsubst < cluster-deployment.yaml > env-cluster-deployment.yaml
 
       - kubernetes/create-or-update-resource:
