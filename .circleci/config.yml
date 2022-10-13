@@ -122,12 +122,12 @@ jobs:
           kubectl-version: $KUBECTL_VERSION
       - kubernetes/install-kubeconfig 
       - when:
-          condition: << parameters.run-deploy >>
+          condition: $ENABLE_DEPLOYMENT 
             # or:
             #   - << pipeline.parameters.run-deploy >>
             #   - equal: [ master, << pipeline.git.branch >> ]
           steps:
-            - run: echo "Running deployemnt"
+            - run: echo $ENABLE_DEPLOYMENT 
       - run:
           name: install config map
           command: | 
