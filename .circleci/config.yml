@@ -114,11 +114,10 @@ jobs:
       - run:
           name: install config map
           command: | 
-            if [[ -z "$STOP_DEPLOYMENT" ]]; 
-            then 
+            if [[ -z "$STOP_DEPLOYMENT" ]]; then echo "deploy MS";
             else 
               echo "Stop deployment - $STOP_DEPLOYMENT";
-              circleci-agent step halt
+              circleci-agent step halt;
             fi    
             if [[ -z "$NAMESPACE" ]]; then NAMESAPCE=default; fi            
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
