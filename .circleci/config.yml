@@ -128,6 +128,7 @@ jobs:
 
       - kubernetes/create-or-update-resource:
           resource-file-path: env-cluster-deployment.yaml
+          show-kubectl-command: true
 
 
 
