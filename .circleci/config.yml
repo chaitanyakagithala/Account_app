@@ -108,23 +108,29 @@ jobs:
             docker push $REPONAME:$TAG
 
 
-  deployMS:    
+  deployMS:
     docker:
       - image: cimg/base:stable
+    parameters:
+      run-deploy:
+        type: env_var_name
+        default: RUN_DEPLOYMENT    
     steps:
       - checkout      
       - envsubst/install
       - kubernetes/install-kubectl:
           kubectl-version: $KUBECTL_VERSION
-      - kubernetes/install-kubeconfig      
+      - kubernetes/install-kubeconfig 
+      - when:
+          condition: << parameters.run-deploy >>
+            # or:
+            #   - << pipeline.parameters.run-deploy >>
+            #   - equal: [ master, << pipeline.git.branch >> ]
+          steps:
+            - run: echo "Running deployemnt"
       - run:
           name: install config map
-          command: |
-            if [[ -z "$DEPLOYMENT_DISABLED" ]]; 
-            then 
-              echo "deployment disabled"
-              exit 0;
-            fi
+          command: | 
             if [[ -z "$NAMESPACE" ]]; then NAMESAPCE=default; fi            
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
             envsubst < docker.env > config-map.env            
