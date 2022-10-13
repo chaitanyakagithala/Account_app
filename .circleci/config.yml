@@ -124,6 +124,11 @@ jobs:
       - run:
           name: install config map
           command: | 
+            if [[ -z "$STOP_DEPLOYMENT" ]]; 
+            then 
+              echo "Stop deployment - $STOP_DEPLOYMENT";
+              circleci-agent step halt
+            fi    
             if [[ -z "$NAMESPACE" ]]; then NAMESAPCE=default; fi            
             export CONFIG_MAP=`echo  $CIRCLE_PROJECT_REPONAME | cut -c 9-`-env
             envsubst < docker.env > config-map.env            
