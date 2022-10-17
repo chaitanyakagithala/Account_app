@@ -52,9 +52,9 @@ jobs:
       - run:
           name: Install dependencies
           command: ./gradlew clean build
-      - run:
-          name: Analyze on sonarcloud
-          command: ./gradlew sonarqube
+      # - run:
+      #     name: Analyze on sonarcloud
+      #     command: ./gradlew sonarqube
       - save_cache:
           paths:
             - ~/.gradle/wrapper
