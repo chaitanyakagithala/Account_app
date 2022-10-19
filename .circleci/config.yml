@@ -27,6 +27,8 @@ workflows:
           filters:
             branches:
               only: /220927_cibuild/
+      #      tags:
+      #        only: /^v.*/
       - testMS:
           context: ossContext
           requires:
@@ -52,9 +54,15 @@ jobs:
       - run:
           name: Install dependencies
           command: ./gradlew clean build
-      # - run:
-      #     name: Analyze on sonarcloud
-      #     command: ./gradlew sonarqube
+      - run:
+         name: Analyze on sonarcloud
+         command: |
+           if [[ -z "$LINT_ENABLED" ]]; 
+           then echo "Sonar push disabled"; 
+           else 
+             ./gradlew sonarqube
+           fi
+
       - save_cache:
           paths:
             - ~/.gradle/wrapper
@@ -101,10 +109,6 @@ jobs:
   deployMS:
     docker:
       - image: cimg/base:stable
-    parameters:
-      run-deploy:
-        type: env_var_name
-        default: ENABLE_DEPLOYMENT    
     steps:
       - checkout      
       - envsubst/install
